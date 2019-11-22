@@ -4,8 +4,7 @@
 \alias{prop_table_by_and_all}
 \title{Create a standard relative frequency table.}
 \usage{
-prop_table_by_and_all(df, av, by_var, vec, useNA = "no",
-  round_perc = 1)
+prop_table_by_and_all(df, av, by_var, vec, useNA = "no", round_perc = 1)
 }
 \arguments{
 \item{vec}{A vector.}
