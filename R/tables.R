@@ -58,3 +58,33 @@ prop_table_by_and_all <- function(df, av, by_var, vec, useNA = "no", round_perc 
   rownames(out)[nrow(out)] <- "Gesamt"
   out
 }
+
+
+
+#### Simple frequency table for saving as excel
+#############################################################################
+#' Create a standard frequency table.
+#'
+#'  Create a standard frequency table that can be written to excel.
+#'
+#' Standard \code{table} output is very ugly when written to excel. This function creates an easy to write to excel object.
+#'
+#'@param x A vector.
+#'@param x_label Label for the x variable?
+#'@param useNA How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.
+#'
+#'@return Returns a data.frame with 2 columns, the levels of x and its frequencies.
+#'
+#'@examples
+#'pretty_table(iris$Species, "Flower Species")
+#'
+#'@export
+pretty_table <- function(x, x_label, useNA = "ifany") {
+  stopifnot(is.character(x_label) && length(x_label) == 1)
+  stopifnot(is.character(useNA) && length(useNA) == 1)
+
+  tab <- table(x, useNA = useNA)
+  out <- as.data.frame(tab)
+  names(out) <- c(x_label, "Haeufigkeit")
+  out
+}

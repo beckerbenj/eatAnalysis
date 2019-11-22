@@ -1,7 +1,7 @@
 Package: eatAnalysis
 Type: Package
 Title: Convenience function for various analysis types.
-Version: 0.1.1
+Version: 0.1.2
 Author: Benjamin Becker
 Description: Helper functions for descriptive analysis, writing to files and file management.
 Depends: R (>= 3.0.0)
