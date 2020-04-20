@@ -1,13 +1,13 @@
 Package: eatAnalysis
 Type: Package
-Title: Convenience function for various analysis types.
-Version: 0.1.2
-Author: Benjamin Becker
+Title: Convenience function for various analysis types
+Version: 0.1.3
+Authors@R: person("Benjamin", "Becker", email = "b.becker@iqb.hu-berlin.de", role = c("aut", "cre"))
 Description: Helper functions for descriptive analysis, writing to files and file management.
 Depends: R (>= 3.0.0)
-Imports: openxlsx
-License: MIT
+Imports: stats, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0)
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.0

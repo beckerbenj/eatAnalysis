@@ -11,6 +11,10 @@
 #'@param round_perc With how many decimals should the percantages be given?
 #'
 #'@return Returns a data.frame with 1 row.
+#'\describe{
+#' \item{A}{The name of the object the analysis results are assigned to.}
+#' \item{b}{The lmer-function called}
+#'}
 #'
 #'@examples
 #'# Example data set
@@ -36,7 +40,9 @@ prop_table <- function(vec, useNA = "no", round_perc = 1) {
 #'
 #' Function is meant to be able to easily \code{rbind} various tables.
 #'
-#'@param vec A vector.
+#'@param df A \code{data.frame}.
+#'@param dep The name of the dependent variable in the \code{data.frame}.
+#'@param by_var The name of the group variable in the \code{data.frame}.
 #'@param useNA How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.
 #'@param round_perc With how many decimals should the percantages be given?
 #'
@@ -47,13 +53,13 @@ prop_table <- function(vec, useNA = "no", round_perc = 1) {
 #'#to be done
 #'
 #'@export
-prop_table_by_and_all <- function(df, av, by_var, vec, useNA = "no", round_perc = 1) {
+prop_table_by_and_all <- function(df, dep, by_var, useNA = "no", round_perc = 1) {
   stopifnot(is.data.frame(df))
-  stopifnot(is.character(av) && length(av) == 1)
+  stopifnot(is.character(dep) && length(dep) == 1)
   stopifnot(is.character(by_var) && length(by_var) == 1)
 
-  gesamt <- prop_table(df[, av], useNA = useNA)
-  out_by <- do.call(rbind, by(df, INDICES = df[, by_var], function(df) prop_table(df[, av], useNA = useNA)))
+  gesamt <- prop_table(df[, dep], useNA = useNA)
+  out_by <- do.call(plyr::rbind.fill, by(df, INDICES = df[, by_var], function(df) prop_table(df[, dep], useNA = useNA)))
   out <- rbind(out_by, gesamt)
   rownames(out)[nrow(out)] <- "Gesamt"
   out

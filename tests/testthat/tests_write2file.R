@@ -4,6 +4,15 @@ context("Write tables and graphs to files")
 old_wd <- getwd()
 # file.remove("write_xlsx_helper.xlsx")
 
+test_that("Save xlsx with one data.frame ", {
+  f <- paste0(tempfile(), ".xlsx")
+  write_xlsx(df_list = mtcars, filePath = f, row.names = FALSE)
+
+  mtcars_test <- openxlsx::read.xlsx(f, sheet = 1)
+  mtcars_test2 <- mtcars
+  rownames(mtcars_test2) <- NULL
+  expect_identical(mtcars_test2, mtcars_test)
+})
 
 test_that("Save xlsx with multiple sheets ", {
   df_list <- list(mtcars1 = mtcars, iris1 = iris, mtcars2 = mtcars)

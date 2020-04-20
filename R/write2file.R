@@ -24,6 +24,8 @@ write_xlsx <- function(df_list, filePath, row.names = TRUE, col.names = TRUE) {
 
   if(file.exists(filePath)) file.remove(filePath)
 
+  if(is.data.frame(df_list)) df_list <- list(df_list)
+
   df_list <- lapply(df_list, function(x) x) # workaround problems with by
   openxlsx::write.xlsx(df_list, file = filePath,
                        sheetName = names(df_list), col.names = col.names, row.names = row.names)

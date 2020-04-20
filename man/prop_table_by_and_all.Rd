@@ -4,10 +4,14 @@
 \alias{prop_table_by_and_all}
 \title{Create a standard relative frequency table.}
 \usage{
-prop_table_by_and_all(df, av, by_var, vec, useNA = "no", round_perc = 1)
+prop_table_by_and_all(df, dep, by_var, useNA = "no", round_perc = 1)
 }
 \arguments{
-\item{vec}{A vector.}
+\item{df}{A \code{data.frame}.}
+
+\item{dep}{The name of the dependent variable in the \code{data.frame}.}
+
+\item{by_var}{The name of the group variable in the \code{data.frame}.}
 
 \item{useNA}{How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.}
 

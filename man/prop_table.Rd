@@ -15,6 +15,10 @@ prop_table(vec, useNA = "no", round_perc = 1)
 }
 \value{
 Returns a data.frame with 1 row.
+\describe{
+\item{A}{The name of the object the analysis results are assigned to.}
+\item{b}{The lmer-function called}
+}
 }
 \description{
 Create a simple relative frequency table with percentages.
