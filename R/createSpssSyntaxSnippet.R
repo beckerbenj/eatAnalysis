@@ -16,14 +16,11 @@
 #'@author Sebastian Weirich
 #'
 #'@examples
-#'\dontrun{
-#'  dat <- foreign::read.spss("c:/exampleFolder/exampleDataSet.sav",
-#'                            to.data.frame=FALSE, use.value.labels = FALSE,
-#'                            reencode = "65001")
-#'  dat <- convertLabel(dat)
-#'  createSpssSyntaxSnippet( dat = dat, file = "c:/labels.txt", keep = FALSE)
-#'}
-#'
+#'file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+#'dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
+#'        reencode = "65001")
+#'dat  <- convertLabel(dat)
+#'createSpssSyntaxSnippet( dat = dat, file = file.path(tempdir(), "labels.txt"), keep = FALSE)
 #'@export
 createSpssSyntaxSnippet <- function ( dat , file, keep = TRUE ) {
   sink(file=file)

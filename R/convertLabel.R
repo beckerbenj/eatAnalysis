@@ -14,12 +14,11 @@
 #'@author Sebastian Weirich
 #'
 #'@examples
-#'\dontrun{
-#' dat <- foreign::read.spss("c:/exampleFolder/exampleDataSet.sav",
-#'                            to.data.frame=FALSE, use.value.labels = FALSE,
-#'                            reencode = "65001")
-#' dat <- convertLabel(dat)
-#'}
+#'file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+#'dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
+#'        reencode = "65001")
+#'dat  <- convertLabel(dat)
+#'str(dat)}
 #'@export
 convertLabel <- function ( spssList , stringsAsFactors = TRUE, useZkdConvention = TRUE) {
   if ( "data.frame" %in% class(spssList )) { stop ( "'spssList' must not be of class 'data.frame'.\n")}

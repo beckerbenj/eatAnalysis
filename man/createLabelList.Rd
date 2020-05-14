@@ -20,14 +20,11 @@ labels as variable attributes. \code{createLabelList} creates a data.frame with
 variable and value labels.
 }
 \examples{
-\dontrun{
- dat <- foreign::read.spss("c:/exampleFolder/exampleDataSet.sav",
-                           to.data.frame=FALSE, use.value.labels = FALSE,
-                           reencode = "65001")
- dat <- convertLabel(dat)
- atts<- createLabelList(dat)
-}
-
+file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
+        reencode = "65001")
+dat  <- convertLabel(dat)
+atts <- createLabelList(dat)
 }
 \author{
 Sebastian Weirich
