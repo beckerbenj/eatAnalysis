@@ -14,11 +14,11 @@
 #'@author Sebastian Weirich
 #'
 #'@examples
-#'file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+#'file <- system.file("extdata", "Klauer.sav", package = "eatAnalysis")
 #'dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
 #'        reencode = "65001")
 #'dat  <- convertLabel(dat)
-#'str(dat)}
+#'str(dat)
 #'@export
 convertLabel <- function ( spssList , stringsAsFactors = TRUE, useZkdConvention = TRUE) {
   if ( "data.frame" %in% class(spssList )) { stop ( "'spssList' must not be of class 'data.frame'.\n")}

@@ -20,9 +20,9 @@ labels as variable attributes. \code{createLabelList} creates a data.frame with
 variable and value labels.
 }
 \examples{
-file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+file <- system.file("extdata", "Klauer.sav", package = "eatAnalysis")
 dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
-        reencode = "65001")
+       reencode = "65001")
 dat  <- convertLabel(dat)
 atts <- createLabelList(dat)
 }

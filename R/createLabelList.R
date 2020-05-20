@@ -15,7 +15,7 @@
 #'@author Sebastian Weirich
 #'
 #'@examples
-#'file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+#'file <- system.file("extdata", "Klauer.sav", package = "eatAnalysis")
 #'dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
 #'        reencode = "65001")
 #'dat  <- convertLabel(dat)
@@ -23,7 +23,7 @@
 #'@export
 createLabelList <- function ( dfr ) {
 stopifnot ( class(dfr) == "data.frame")
-varList<- do.call("rbind.fill", lapply(colnames(dfr), FUN = function ( v ) {
+varList<- do.call(plyr::rbind.fill, lapply(colnames(dfr), FUN = function ( v ) {
   lbs  <- attributes(dfr[,v])
   if (!is.null(lbs[["varLabel"]]))  {
     varLab <- unlist(lbs[["varLabel"]])

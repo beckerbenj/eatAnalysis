@@ -8,8 +8,8 @@ context("Create result tables")
 # saveRDS(results, "C:/Benjamin_Becker/02_Repositories/packages/eatAnalysis/tests/testthat/old_eatTools_out.RDS")
 # saveRDS(fmVA, "C:/Benjamin_Becker/02_Repositories/packages/eatAnalysis/tests/testthat/lme4_out.RDS")
 
-tools_res <- readRDS("C:/Benjamin_Becker/02_Repositories/packages/eatAnalysis/tests/testthat/old_eatTools_out.RDS")
-fmVA <- readRDS("C:/Benjamin_Becker/02_Repositories/packages/eatAnalysis/tests/testthat/lme4_out.RDS")
+tools_res <- readRDS("old_eatTools_out.RDS")
+fmVA <- readRDS("lme4_out.RDS")
 
 test_that("get.lmer.effects ", {
   out <- get.lmer.effects(fmVA)

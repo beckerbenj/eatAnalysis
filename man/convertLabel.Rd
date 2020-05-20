@@ -21,11 +21,11 @@ By default, 'read.spss' from the foreign package uses variable.labels as attribu
 variable in the data.frame. \code{convertLabel} provides variable and value labels as variable attributes.
 }
 \examples{
-file <- system.file("extdata", "Klauer.sav", package = "eatTools")
+file <- system.file("extdata", "Klauer.sav", package = "eatAnalysis")
 dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
-        reencode = "65001")
+       reencode = "65001")
 dat  <- convertLabel(dat)
-str(dat)}
+str(dat)
 }
 \author{
 Sebastian Weirich

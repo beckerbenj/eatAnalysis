@@ -1,7 +1,7 @@
 Package: eatAnalysis
 Type: Package
 Title: Convenience function for various analysis types
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: person("Benjamin", "Becker", email = "b.becker@iqb.hu-berlin.de", role = c("aut", "cre"))
 Description: Helper functions for descriptive analysis, writing to files and file management.
 Depends: R (>= 3.5.0)
@@ -9,5 +9,5 @@ Imports: stats, methods, utils, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0), 
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
+Suggests: testthat, foreign
 RoxygenNote: 7.1.0
