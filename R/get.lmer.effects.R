@@ -29,7 +29,8 @@
 #'@author Sebastian Weirich
 #'
 #'@examples
-#' library ( lme4 )
+#'\dontrun{
+#'library ( lme4 )
 #' ### First example: GLMM analysis
 #' fmVA <- glmer( r2 ~ Anger + Gender + btype + situ + (1|id) + (1|item),
 #'                family = binomial, data = VerbAgg)
@@ -40,7 +41,7 @@
 #' ### We use the 'bootMer' function fom the lme4 package
 #' fmVAB<- bootMer(x = fmVA, FUN = get.lmer.effects.forBootMer, nsim = 5)
 #' resultsBoot<- get.lmer.effects ( lmerObj = fmVA, bootMerObj = fmVAB, conf = .95, saveData = FALSE)
-#'
+#'}
 #'@export
 get.lmer.effects <- function ( lmerObj , bootMerObj = NULL, conf = .95, saveData = FALSE) {
         ### untere Zeile: man muss diesen komplizierten Weg waehlen, weil sonst das Objekt 'model' eine laenge > 1 hat, wenn das uebergebene Objekt 'lmerObj' etwa 'mod[[1]]' heisst
@@ -212,6 +213,7 @@ get.lmer.effects.forBootMer <- function ( lmerObj) {get.lmer.effects ( lmerObj=l
 #'@author Sebastian Weirich
 #'
 #'@examples
+#'\dontrun{
 #' library(lme4)
 #' ### Example from the help page of lmer().
 #' fm1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
@@ -221,7 +223,7 @@ get.lmer.effects.forBootMer <- function ( lmerObj) {get.lmer.effects ( lmerObj=l
 #' ### specify a "null model" nested in the first one: no fixed effects, only intercept
 #' fm0 <- lmer(Reaction ~ (Days | Subject), sleepstudy)
 #' save.lmer.effects(lmerObj = fm1, lmerObjRestrict = fm0, fileName = tempfile())
-#'
+#'}
 #'@export
 save.lmer.effects <- function ( lmerObj, lmerObjRestrict = NULL, fileName, scipen=6) {
            ret   <- get.lmer.effects(lmerObj, saveData = FALSE)

@@ -1,3 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^otherCode$
+^\.travis\.yml$
+^appveyor\.yml$
+^codecov\.yml$

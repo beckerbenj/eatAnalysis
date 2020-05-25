@@ -38,6 +38,7 @@ Schielzeth (2013) is provided. The parameters are labeled \code{R2_m} and \code{
 in the \code{par}-column.
 }
 \examples{
+\dontrun{
 library ( lme4 )
 ### First example: GLMM analysis
 fmVA <- glmer( r2 ~ Anger + Gender + btype + situ + (1|id) + (1|item),
@@ -49,7 +50,7 @@ results    <- get.lmer.effects ( fmVA )
 ### We use the 'bootMer' function fom the lme4 package
 fmVAB<- bootMer(x = fmVA, FUN = get.lmer.effects.forBootMer, nsim = 5)
 resultsBoot<- get.lmer.effects ( lmerObj = fmVA, bootMerObj = fmVAB, conf = .95, saveData = FALSE)
-
+}
 }
 \author{
 Sebastian Weirich

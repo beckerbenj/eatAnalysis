@@ -22,6 +22,7 @@ No output is returned to console. Two files are created in the desired directory
 The output of any lme4 analysis is saved in a memory saving manner.
 }
 \examples{
+\dontrun{
 library(lme4)
 ### Example from the help page of lmer().
 fm1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
@@ -31,7 +32,7 @@ save.lmer.effects(fm1, fileName = tempfile())
 ### specify a "null model" nested in the first one: no fixed effects, only intercept
 fm0 <- lmer(Reaction ~ (Days | Subject), sleepstudy)
 save.lmer.effects(lmerObj = fm1, lmerObjRestrict = fm0, fileName = tempfile())
-
+}
 }
 \author{
 Sebastian Weirich
