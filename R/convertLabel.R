@@ -15,8 +15,7 @@
 #'
 #'@examples
 #'file <- system.file("extdata", "Klauer.sav", package = "eatAnalysis")
-#'dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE,
-#'        reencode = "65001")
+#'dat  <- foreign::read.spss(file, to.data.frame=FALSE, use.value.labels = FALSE)
 #'dat  <- convertLabel(dat)
 #'str(dat)
 #'@export
