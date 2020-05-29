@@ -27,8 +27,8 @@
 #'the names of columns in the result which not used for merging (appearing in \code{by} etc).
 #'@param setAttr Logical: restore the variable attributes? If FALSE, the behavior of \code{mergeAttr} equals
 #'the behavior of \code{merge}.
-#'@param onlyVarValLabs Logical: If TRUE, only the variable and value labels will be restored. If FALSE, all
-#'variable attributes will be restored.
+#'@param onlyVarValLabs If TRUE, only the variable and value labels as captured by \code{read.spss} and
+#'stored by \code{\link{convertLabel}} will be restored. If FALSE, all variable attributes will be restored.
 #'@param homoClass Logical: Beginning with R version 3.5, \code{merge} may give an error if the class of the
 #'by-variables differs in both data.frames. If TRUE, class of by-variable(s) will be homogenized
 #'before merging.
