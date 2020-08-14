@@ -1,13 +1,15 @@
 ####
 #############################################################################
-#' Transform SPSS variable and value labels into old ZKD convention.
+#' Transform SPSS variable and value labels.
 #'
-#' By default, 'read.spss' from the foreign package uses variable.labels as attributes of the whole data.frame, value.labels as attribute of each specific
-#'variable in the data.frame. \code{convertLabel} provides variable and value labels as variable attributes.
+#' By default, \code{\link[foreign]{read.spss}} from the \code{foreign} package uses variable labels as attributes of the whole
+#' \code{data.frame}, value labels as attribute of each specific
+#'variable in the \code{data.frame}. \code{convertLabel} provides variable and value labels as variable attributes.
 #'
-#'@param spssList An object created by \code{\link[foreign]{read.spss}}. Important: Using \code{\link[foreign]{read.spss}}, \code{to.data.frame} has to be FALSE.
+#'@param spssList An object created by \code{\link[foreign]{read.spss}}. Important: Using \code{\link[foreign]{read.spss}},
+#'\code{to.data.frame} has to be \code{FALSE}.
 #'@param stringsAsFactors Transform character variables into factors?
-#'@param useZkdConvention Logical: Use ZKD convention, i.e. variable.labels are named 'varLabel', value.labels are named 'valLabel'.
+#'@param useZkdConvention Logical: If \code{TRUE}. variable labels are named \code{'varLabel'}, value labels are named \code{'valLabel'}.
 #'
 #'@return A \code{data.frame}.
 #'

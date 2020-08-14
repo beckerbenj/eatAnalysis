@@ -11,7 +11,7 @@ prop_table(vec, useNA = "no", round_perc = 1)
 
 \item{useNA}{How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.}
 
-\item{round_perc}{With how many decimals should the percantages be given?}
+\item{round_perc}{With how many decimals should the percentages be given?}
 }
 \value{
 Returns a data.frame with 1 row.

@@ -8,7 +8,7 @@
 #'
 #'@param vec A vector.
 #'@param useNA How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.
-#'@param round_perc With how many decimals should the percantages be given?
+#'@param round_perc With how many decimals should the percentages be given?
 #'
 #'@return Returns a data.frame with 1 row.
 #'\describe{
@@ -44,7 +44,7 @@ prop_table <- function(vec, useNA = "no", round_perc = 1) {
 #'@param dep The name of the dependent variable in the \code{data.frame}.
 #'@param by_var The name of the group variable in the \code{data.frame}.
 #'@param useNA How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.
-#'@param round_perc With how many decimals should the percantages be given?
+#'@param round_perc With how many decimals should the percentages be given?
 #'
 #'@return Returns a data.frame with 1 row.
 #'

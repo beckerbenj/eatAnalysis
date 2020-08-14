@@ -2,24 +2,24 @@
 % Please edit documentation in R/write2file.R
 \name{write_xlsx}
 \alias{write_xlsx}
-\title{Save to xlsx with multiple sheets.}
+\title{Save to \code{.xlsx}.}
 \usage{
 write_xlsx(df_list, filePath, row.names = TRUE, col.names = TRUE)
 }
 \arguments{
-\item{df_list}{A named list with data.frames to be written to xlsx. The names of the list become the sheet names.}
+\item{df_list}{A named list with \code{data.frames} to be written to \code{.xlsx}. The names of the list become the sheet names.}
 
 \item{filePath}{The path to the output file.}
 
-\item{row.names}{A logical value indicating whether the row names of x are to be written along with x to the file.}
+\item{row.names}{Logical: Should row names of the \code{data.frames} be written to file?}
 
-\item{col.names}{A logical value indicating whether the column names of x are to be written along with x to the file.}
+\item{col.names}{Logical: Should column names of the \code{data.frames} be written to file?}
 }
 \description{
-Create an xlsx file with multiple sheets.
+Create an \code{.xlsx} file with multiple sheets.
 }
 \details{
-An existing file is overwritten
+An existing file is overwritten.
 }
 \examples{
 # Example data set
