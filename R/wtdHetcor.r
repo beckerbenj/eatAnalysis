@@ -37,8 +37,8 @@
 wtdHetcor <- function ( dataFrame, vars=NULL, weights=NULL, out = c("wide", "long", "both")  ) {
         out    <- match.arg(arg = out, choices = c("wide", "long", "both"))
         if(!"data.frame" %in% class(dataFrame)) {stop("Object 'dataFrame' must be of class 'data.frame'.")}
-        allVars<- list(vars = vars, weights = weights)
         if(is.null(vars)) {vars <- colnames(dataFrame)}
+        allVars<- list(vars = vars, weights = weights)
         allNam <- lapply(allVars, FUN=function(ii) {eatTools::existsBackgroundVariables(dat = dataFrame, variable=ii)})
         dataFrame <- eatTools::facToChar(dataFrame, from = "integer", to = "numeric")
         classes<- sort(unique(sapply(dataFrame[,allNam[["vars"]]], class)))
