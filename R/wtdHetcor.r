@@ -41,7 +41,12 @@ wtdHetcor <- function ( dataFrame, vars=NULL, weights=NULL, out = c("wide", "lon
         allVars<- list(vars = vars, weights = weights)
         allNam <- lapply(allVars, FUN=function(ii) {eatTools::existsBackgroundVariables(dat = dataFrame, variable=ii)})
         dataFrame <- eatTools::facToChar(dataFrame, from = "integer", to = "numeric")
-        classes<- sort(unique(sapply(dataFrame[,allNam[["vars"]]], class)))
+        classes<- lapply(dataFrame[,allNam[["vars"]]], class)
+        len    <- sapply(classes, length)
+        if ( !all(len==1)) {
+            stop(paste0("Following columns in data.frame with irregular classes: '",paste( allNam[["vars"]][which(len!=1)], collapse="', '"),"'. Please check your data.") )  
+        }        
+        classes<- sort(unique(unlist(classes)))
         if ( !all(classes %in% c("factor", "numeric")) ) {stop("All variables must be of class 'factor' or 'numeric'")}
         wb     <- ctype(dataFrame=dataFrame, vars = allNam[["vars"]])           ### workbook
         wb     <- do.call("rbind", plyr::alply(wb, .margins = 1, .fun = function ( z ) {
