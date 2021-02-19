@@ -8,12 +8,14 @@ context("Create result tables")
 # saveRDS(results, "C:/Benjamin_Becker/02_Repositories/packages/eatAnalysis/tests/testthat/old_eatTools_out.RDS")
 # saveRDS(fmVA, "C:/Benjamin_Becker/02_Repositories/packages/eatAnalysis/tests/testthat/lme4_out.RDS")
 
+#tools_res <- readRDS("tests/testthat/old_eatTools_out.RDS")
 tools_res <- readRDS("old_eatTools_out.RDS")
+#fmVA <- readRDS("tests/testthat/lme4_out.RDS")
 fmVA <- readRDS("lme4_out.RDS")
 
 test_that("get.lmer.effects ", {
   out <- get.lmer.effects(fmVA)
-  expect_identical(tools_res, out)
+  expect_equal(tools_res, out)
 })
 
 test_that("save.lmer.effects ", {
@@ -22,5 +24,5 @@ test_that("save.lmer.effects ", {
   out_file_in <- paste0(out_file, ".rda")
   load(out_file_in)
 
-  expect_identical(tools_res[, -1], ret[, -1])
+  expect_equal(tools_res[, -1], ret[, -1])
 })

@@ -61,7 +61,7 @@ prop_table_by_and_all <- function(df, dep, by_var, useNA = "no", round_perc = 1)
   gesamt <- prop_table(df[, dep], useNA = useNA)
   out_by <- do.call(plyr::rbind.fill, by(df, INDICES = df[, by_var], function(df) prop_table(df[, dep], useNA = useNA)))
   out <- rbind(out_by, gesamt)
-  rownames(out)[nrow(out)] <- "Gesamt"
+  rownames(out)[nrow(out)] <- "Total"
   out
 }
 
@@ -91,6 +91,6 @@ pretty_table <- function(x, x_label, useNA = "ifany") {
 
   tab <- table(x, useNA = useNA)
   out <- as.data.frame(tab)
-  names(out) <- c(x_label, "Haeufigkeit")
+  names(out) <- c(x_label, "Frequency")
   out
 }
