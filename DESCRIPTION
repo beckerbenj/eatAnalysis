@@ -8,7 +8,7 @@ Authors@R: c(
     person("Karoline", "Sachse", role = c("ctb")))
 Description: Helper functions for descriptive analysis, writing to files and file management.
 Depends: R (>= 3.5.0)
-Imports: stats, methods, utils, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0), boot, Matrix, combinat, eatTools, wCorr
+Imports: stats, methods, utils, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0), boot, Matrix, combinat, eatTools, wCorr, xtable
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -17,4 +17,4 @@ Suggests:
     foreign,
     covr
 RoxygenNote: 7.1.1
-Remotes: weirichs/eatTools
+

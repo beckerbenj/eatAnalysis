@@ -3,6 +3,7 @@
 export(convertLabel)
 export(createLabelList)
 export(createSpssSyntaxSnippet)
+export(df2tex_xtable)
 export(get.lmer.effects)
 export(get.lmer.effects.forBootMer)
 export(intGen)
