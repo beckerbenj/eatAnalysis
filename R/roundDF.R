@@ -10,7 +10,6 @@
 #'
 #'@examples
 #'roundDF(mtcars, roundN = 0)
-#'
 #'@export
 roundDF <- function(df, roundN = 3) {
   roundCol <- function(var, roundN) {

@@ -19,5 +19,4 @@ Round all numeric variables in a \code{data.frame}.
 }
 \examples{
 roundDF(mtcars, roundN = 0)
-
 }
