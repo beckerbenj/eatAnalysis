@@ -36,7 +36,6 @@ Create latex code for a table from a \code{data.frame}.
 Prints the resulting latex code to console
 }
 \examples{
-# Example data set
-#to be done
+df2tex_xtable(mtcars)
 
 }
