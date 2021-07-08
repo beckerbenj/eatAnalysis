@@ -1,11 +1,9 @@
 
-context("Write tables and graphs to files")
-
 old_wd <- getwd()
 # file.remove("write_xlsx_helper.xlsx")
 
 test_that("Save xlsx with one data.frame ", {
-  f <- paste0(tempfile(), ".xlsx")
+  f <- tempfile(fileext = ".xlsx")
   write_xlsx(df_list = mtcars, filePath = f, row.names = FALSE)
 
   mtcars_test <- openxlsx::read.xlsx(f, sheet = 1)
@@ -15,11 +13,12 @@ test_that("Save xlsx with one data.frame ", {
 })
 
 test_that("Save xlsx with multiple sheets ", {
+  f <- tempfile(fileext = ".xlsx")
   df_list <- list(mtcars1 = mtcars, iris1 = iris, mtcars2 = mtcars)
-  write_xlsx(df_list = df_list, filePath = "write_xlsx_helper.xlsx", row.names = FALSE)
+  write_xlsx(df_list = df_list, filePath = f, row.names = FALSE)
 
-  mtcars_test <- openxlsx::read.xlsx("write_xlsx_helper.xlsx", sheet = "mtcars1")
-  iris_test <- openxlsx::read.xlsx("write_xlsx_helper.xlsx", sheet = "iris1")
+  mtcars_test <- openxlsx::read.xlsx(f, sheet = "mtcars1")
+  iris_test <- openxlsx::read.xlsx(f, sheet = "iris1")
   rownames(mtcars) <- rownames(iris) <- NULL
   expect_identical(mtcars, mtcars_test)
   iris2 <- iris
