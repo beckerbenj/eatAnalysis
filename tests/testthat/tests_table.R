@@ -19,4 +19,5 @@ test_that("Prop table by and all", {
   expect_equal(names(out), c("4", "6", "8"))
   expect_equal(dim(out), c(4, 3))
   expect_equal(as.numeric(out[1, ]), c(6.7, 13.3, 80))
+  expect_equal(rownames(out), c("3", "4", "5", "Total"))
 })

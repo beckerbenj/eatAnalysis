@@ -59,7 +59,9 @@ prop_table_by_and_all <- function(df, dep, by_var, useNA = "no", round_perc = 1)
   stopifnot(is.character(by_var) && length(by_var) == 1)
 
   gesamt <- prop_table(df[, dep], useNA = useNA)
-  out_by <- do.call(plyr::rbind.fill, by(df, INDICES = df[, by_var], function(df) prop_table(df[, dep], useNA = useNA)))
+  split_tables <- by(df, INDICES = df[, by_var], function(df) prop_table(df[, dep], useNA = useNA))
+  out_by <- do.call(plyr::rbind.fill, split_tables)
+  rownames(out_by) <- names(split_tables)
   out <- rbind(out_by, gesamt)
   rownames(out)[nrow(out)] <- "Total"
   out
