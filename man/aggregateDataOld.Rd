@@ -18,7 +18,7 @@ aggregateDataOld(
 
 \item{spalten}{Column names or numbers with variables to aggregate.}
 
-\item{unexpected.pattern.as.na}{Logical: TRUE, if non-valid patterns should be aggregated to NA.}
+\item{unexpected.pattern.as.na}{Logical: \code{TRUE}, if non-valid patterns should be aggregated to \code{NA}.}
 
 \item{printCases}{Logical: Specifies whether exhaustive aggregation information should be printed on console.}
 
@@ -48,9 +48,9 @@ ZKD input list.
 }
 \examples{
 ### create artificial data
-dat <- data.frame ( id = paste0("P", 11:50),
-                    matrix(data = sample(x=0:1, size = 400, replace = TRUE),
-                    nrow=40, ncol = 10))
+dat <- data.frame(id = paste0("P", 11:50),
+                  matrix(data = sample(x=0:1, size = 400, replace = TRUE),
+                  nrow=40, ncol = 10))
 ### aggregate Item 0+1+2 and 4+5 and 8+9: define sequential letter
 colnames(dat)[-1] <- c("I1a", "I1b", "I1c", "I2a", "I3a", "I3b",
                        "I4a", "I5a", "I6a", "I6b")

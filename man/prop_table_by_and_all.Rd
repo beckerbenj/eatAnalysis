@@ -4,7 +4,14 @@
 \alias{prop_table_by_and_all}
 \title{Create a standard relative frequency table.}
 \usage{
-prop_table_by_and_all(df, dep, by_var, useNA = "no", round_perc = 1)
+prop_table_by_and_all(
+  df,
+  dep,
+  by_var,
+  weights = NULL,
+  na.rm = TRUE,
+  round_perc = 1
+)
 }
 \arguments{
 \item{df}{A \code{data.frame}.}
@@ -13,7 +20,9 @@ prop_table_by_and_all(df, dep, by_var, useNA = "no", round_perc = 1)
 
 \item{by_var}{The name of the group variable in the \code{data.frame}.}
 
-\item{useNA}{How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.}
+\item{weights}{The name of the weights variable in the \code{data.frame}.}
+
+\item{na.rm}{Set to \code{FALSE} to suppress checking for \code{NAs}. If \code{TRUE}, \code{NAs} are removed from \code{x} as well as from \code{weights} prior to variance estimation.}
 
 \item{round_perc}{With how many decimals should the percentages be given?}
 }
@@ -27,7 +36,12 @@ Create a simple relative frequency table with percentages.
 Function is meant to be able to easily \code{rbind} various tables.
 }
 \examples{
-# Example data set
-#to be done
+# without weights
+prop_table_by_and_all(df = mtcars, dep = "cyl", by_var = "gear")
+
+# with weights
+mtcars2 <- mtcars
+mtcars2[, "weights"] <- rep(c(0.5, 1), 16)
+prop_table_by_and_all(df = mtcars2, dep = "cyl", by_var = "gear", weights = "weights")
 
 }

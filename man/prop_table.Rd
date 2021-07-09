@@ -4,30 +4,28 @@
 \alias{prop_table}
 \title{Create a standard relative frequency table.}
 \usage{
-prop_table(vec, useNA = "no", round_perc = 1)
+prop_table(vec, weights = NULL, na.rm = FALSE, round_perc = 1)
 }
 \arguments{
 \item{vec}{A vector.}
 
-\item{useNA}{How should missing values be treated in the table? Possible values: \code{no}, \code{ifany}, \code{always}.}
+\item{weights}{A numeric vector of non-negative weights.}
+
+\item{na.rm}{Set to \code{FALSE} to suppress checking for \code{NAs}. If \code{TRUE}, \code{NAs} are removed from \code{x} as well as from \code{weights} prior to variance estimation.}
 
 \item{round_perc}{With how many decimals should the percentages be given?}
 }
 \value{
 Returns a data.frame with 1 row.
-\describe{
-\item{A}{The name of the object the analysis results are assigned to.}
-\item{b}{The lmer-function called}
-}
 }
 \description{
-Create a simple relative frequency table with percentages.
-}
-\details{
-Function is meant to be able to easily \code{rbind} various tables.
+Create a simple relative frequency table with percentages, optionally while using sampling weights.
 }
 \examples{
-# Example data set
-#to be done
+# without weights
+prop_table(mtcars$cyl)
+
+# with weights
+prop_table(mtcars$cyl, weights = rep(c(0.5, 1), 16))
 
 }
