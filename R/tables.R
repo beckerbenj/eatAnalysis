@@ -77,7 +77,7 @@ prop_table_by_and_all <- function(df, dep, by_var, weights = NULL, na.rm = TRUE,
     weights <- "artificial_weights"
   }
 
-  gesamt <- prop_table(df[, dep], weights = df[, weights], na.rm = na.rm)
+  gesamt <- prop_table(df[, dep], weights = df[, weights], na.rm = na.rm, round_perc = round_perc)
   split_tables <- by(df, INDICES = df[, by_var], function(subdf) {
     prop_table(subdf[, dep], na.rm = na.rm, weights = subdf[, weights])
   })

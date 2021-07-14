@@ -39,6 +39,11 @@ test_that("Prop table by and all", {
   expect_equal(dim(out), c(4, 3))
   expect_equal(as.numeric(out[1, ]), c(6.7, 13.3, 80))
   expect_equal(rownames(out), c("3", "4", "5", "Total"))
+
+  out2 <- prop_table_by_and_all(df = mtcars, dep = "cyl", by_var = "gear", round_perc = 2)
+  expect_equal(names(out2), c("4", "6", "8"))
+  expect_equal(dim(out2), c(4, 3))
+  expect_equal(as.numeric(out2[4, ]), c(34.38, 21.88, 43.75))
 })
 
 test_that("Prop table by and all with weights", {
