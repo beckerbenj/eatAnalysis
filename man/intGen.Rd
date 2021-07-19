@@ -2,7 +2,7 @@
 % Please edit documentation in R/intGen.R
 \name{intGen}
 \alias{intGen}
-\title{Generate interaction terms for lm formulas}
+\title{Generate interaction terms for \code{lm} formulas}
 \usage{
 intGen(vars, upto = 3)
 }

@@ -24,14 +24,14 @@ aggregateDataOld(
 
 \item{printPattern}{Logical: Print the unexpected patterns to console?}
 
-\item{inputList}{Optional: ZKD input list to differentiate between variables (subitems) and items. If \code{NULL},
+\item{inputList}{Optional: Input list to differentiate between variables (sub items) and items. If \code{NULL},
 all variables in the data frame which share the same ID except for the kast sign are considered
 to belong to the same item.}
 }
 \value{
 A list. First element is a data frame with sum scores. Second element is a data frame
 with aggregated scores. Third element is a data frame with information how many variables
-are summarizeds for each item.
+are summarized for each item.
 }
 \description{
 This is the old version of the \code{aggregateData} function from the \code{eatPrep}

@@ -18,13 +18,13 @@
 #'@param unexpected.pattern.as.na Logical: \code{TRUE}, if non-valid patterns should be aggregated to \code{NA}.
 #'@param printCases Logical: Specifies whether exhaustive aggregation information should be printed on console.
 #'@param printPattern Logical: Print the unexpected patterns to console?
-#'@param inputList Optional: ZKD input list to differentiate between variables (subitems) and items. If \code{NULL},
+#'@param inputList Optional: Input list to differentiate between variables (sub items) and items. If \code{NULL},
 #'all variables in the data frame which share the same ID except for the kast sign are considered
 #'to belong to the same item.
 #'
 #'@return A list. First element is a data frame with sum scores. Second element is a data frame
 #'with aggregated scores. Third element is a data frame with information how many variables
-#'are summarizeds for each item.
+#'are summarized for each item.
 #'
 #'@author Sebastian Weirich
 #'

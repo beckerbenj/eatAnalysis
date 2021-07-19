@@ -9,7 +9,7 @@
 
 ## Overview
 
-`eatAnalysis` provides helpful functions for educational research, e.g. when using the `R` package `lme4`, when writing files to `.xlsx` etc..
+`eatAnalysis` provides helpful functions for educational research. This includes functions for processing `lme4` output, writing files to `.xlsx` and calculating (weighted) descriptive statistics.
 
 ## Installation
 

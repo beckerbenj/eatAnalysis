@@ -1,6 +1,6 @@
 ####
 #############################################################################
-#' Generate interaction terms for lm formulas
+#' Generate interaction terms for \code{lm} formulas
 #'
 #' Specify two-way or three-way interactions from a set of independent variables.
 #' The function might be useful, if the user has a regression model with more than
