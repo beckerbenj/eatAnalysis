@@ -17,7 +17,8 @@ wtdHetcor(
 \item{vars}{character or numeric vector indicating the variables for which a correlation table should
 be computed. If \code{NULL}, all variables in the data.frame will be used.}
 
-\item{weights}{Numeric vector of non-negative weights. If \code{NULL}, equally weighted cases are
+\item{weights}{character or numeric vector indicating the column in \code{dataFrame} which contains
+numeric non-negative weights. If \code{NULL}, equally weighted cases are
 assumed, i.e. all weights are defaulted to 1.}
 
 \item{out}{Specifies the output format. \code{"wide"} gives a classical correlation matrix,
@@ -44,7 +45,7 @@ mtcars[,"weight"] <- abs(rnorm(nrow(mtcars), 10,5))
 # choose variables
 vars <- c("mpg", "cyl", "hp")
 # inappropriate classes: variables which are inherently ordinal, have the 'wrong'
-# class 'numeric'. (We use only the first imputation of the data set.)
+# class 'numeric'.
 sapply(mtcars[,vars], class)
 mtcars[,"cyl"] <- as.factor(mtcars[,"cyl"])
 wtdHetcor(mtcars, vars = vars, out = "long")
