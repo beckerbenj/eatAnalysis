@@ -17,6 +17,7 @@
 #'assumed, i.e. all weights are defaulted to 1.
 #'@param out Specifies the output format. \code{"wide"} gives a classical correlation matrix,
 #'\code{"long"} gives a long format table which includes the type of correlation.
+#'@param triangular Logical: should the wide-format matrix be arranged in triangular shape?
 #'
 #'@return a correlation table or a list
 #'
@@ -35,7 +36,7 @@
 #'
 #'@export
 ### wenn vars gleich NULL; werden alle Variablen genommen
-wtdHetcor <- function ( dataFrame, vars=NULL, weights=NULL, out = c("wide", "long", "both")  ) {
+wtdHetcor <- function ( dataFrame, vars=NULL, weights=NULL, out = c("wide", "long", "both") , triangular = FALSE   ) {
         out    <- match.arg(arg = out, choices = c("wide", "long", "both"))
         if(!"data.frame" %in% class(dataFrame)) {stop("Object 'dataFrame' must be of class 'data.frame'.")}
         if(is.null(vars)) {vars <- colnames(dataFrame)}
@@ -74,6 +75,7 @@ wtdHetcor <- function ( dataFrame, vars=NULL, weights=NULL, out = c("wide", "lon
                   z[,"cor"] <- out
                   return(z)}))
         wide   <- reshape2::dcast(wb, Var1~Var2, value.var = "cor")
+        if (triangular ) {wide <- makeTria(wide)}
         if ( out == "wide") {return(wide)}
         if ( out == "long") {return(wb)}
         if ( out == "both") {return(list ( long=wb, wide=wide))}}
@@ -97,4 +99,13 @@ ctype <- function ( dataFrame, vars ) {
                   return(zle)}) ), stringsAsFactors=FALSE)
         colnames(komb2)[5] <- "method"
         return(komb2)}
+
+### Matrix dreieckig machen
+makeTria <- function(mat) {
+        cols <- sort(sapply(mat[,-1, drop=FALSE], FUN = function (d) {length(which(is.na(d)))}), decreasing =FALSE)
+        mat  <- mat[,c(colnames(mat)[1], names(cols))]
+        rows <- sort(apply(mat[,-1], MARGIN = 1, FUN = function (d) {length(which(is.na(d)))}), decreasing=TRUE, index.return=TRUE)[["ix"]]
+        mat  <- mat[rows,]
+        rownames(mat) <- NULL
+        return(mat)}
 

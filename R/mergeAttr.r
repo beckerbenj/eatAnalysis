@@ -54,8 +54,24 @@
 #'attr(df4[,"y"], "variable.label")
 #'@export
 mergeAttr <- function ( x, y, by = intersect(names(x), names(y)), by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all, sort = TRUE, suffixes = c(".x",".y"), setAttr = TRUE, onlyVarValLabs = TRUE, homoClass = TRUE) {
-     ### erstmal von allen by-variablen die Klassen homogenisieren, falls gewuenscht
              byvars<- data.frame ( x=by.x, y=by.y, clx = sapply(x[,by.x,drop=FALSE], class), cly = sapply(y[,by.y,drop=FALSE], class), stringsAsFactors = FALSE)
+     ### pruefen, ob die level der by-variablen in dem anderen datensatz enthalten sind
+             levs  <- apply(X=byvars, MARGIN = 1, FUN = function (v) {
+                      nix <- setdiff(unique(y[,v[["y"]]]), unique(x[,v[["x"]]]))
+                      if(length(nix)>0) {cat(paste0(length(nix), " unit(s) of merging variable '",v[["y"]],"' from data set 'y' not included in data set 'x'.\n"))}
+                      niy <- setdiff(unique(x[,v[["x"]]]), unique(y[,v[["y"]]]))
+                      if(length(niy)>0) {cat(paste0(length(niy), " unit(s) of merging variable '",v[["x"]],"' from data set 'x' not included in data set 'y'.\n"))} })
+     ### pruefen, ob die level der by-variablen unique sind
+             if ( nrow(byvars)>1) {
+                   xby <- unlist(plyr::alply(x, .margins = 1, .fun = function (z) {paste(as.vector(unlist(set.col.type(z[,byvars[,"x"]], col.type = list("character" = byvars[,"x"])))),collapse="_")}))
+                   yby <- unlist(plyr::alply(y, .margins = 1, .fun = function (z) {paste(as.vector(unlist(set.col.type(z[,byvars[,"y"]], col.type = list("character" = byvars[,"y"])))),collapse="_")}))
+             }  else  {
+                   xby <- x[,byvars[1,"x"]]
+                   yby <- y[,byvars[1,"y"]]
+             }
+             if ( length(xby) != length(unique(xby))) { cat("Merging levels are not unique in data set 'x'.\n")}
+             if ( length(yby) != length(unique(yby))) { cat("Merging levels are not unique in data set 'y'.\n")}
+     ### von allen by-variablen die Klassen homogenisieren, falls gewuenscht
              for ( i in 1:nrow(byvars) ) {
                    if ( length(unique(unlist(byvars[i,c("clx", "cly")]))) > 1 ) {
                         if ( isTRUE(homoClass)) {
@@ -69,25 +85,25 @@ mergeAttr <- function ( x, y, by = intersect(names(x), names(y)), by.x = by, by.
              }
      ### jetzt mergen und DANACH die Attribute rekonstruieren
              datM  <- merge ( x=x, y=y, by.x=by.x, by.y=by.y, all=all, all.x=all.x, all.y=all.y, sort=sort, suffixes =suffixes)
-             if ( setAttr == TRUE ) {
+             if ( isTRUE(setAttr) ) {
                    dats<- list(x=x, y=y)
                    for ( d in names(dats)) {
                          for ( v in colnames(dats[[d]])) {
                                vsuf <- paste0(v, suffixes[2])
                                if ( vsuf %in% colnames(datM) ) {
                                     if ( onlyVarValLabs == FALSE ) {
-                                         attributes(datM[,vsuf]) <- attributes(dats[[d]][,v])
+                                         if(!is.null(attributes(dats[[d]][,v]))) {attributes(datM[,vsuf]) <- attributes(dats[[d]][,v])}
                                     }  else  {
-                                         attr(datM[,vsuf], "varLabel") <- attr(dats[[d]][,v], "varLabel")
-                                         attr(datM[,vsuf], "valLabel") <- attr(dats[[d]][,v], "valLabel")
+                                         if(!is.null(attr(dats[[d]][,v], "varLabel"))) {attr(datM[,vsuf], "varLabel") <- attr(dats[[d]][,v], "varLabel")}
+                                         if(!is.null(attr(dats[[d]][,v], "valLabel"))) {attr(datM[,vsuf], "valLabel") <- attr(dats[[d]][,v], "valLabel")}
                                     }
                                }  else  {
                                     if ( v %in% colnames(datM) ) {
                                          if ( onlyVarValLabs == FALSE ) {
-                                              attributes(datM[,v]) <- attributes(dats[[d]][,v])
+                                              if(!is.null(attributes(dats[[d]][,v]))) {attributes(datM[,v]) <- attributes(dats[[d]][,v])}
                                          }  else  {
-                                              attr(datM[,v], "varLabel") <- attr(dats[[d]][,v], "varLabel")
-                                              attr(datM[,v], "valLabel") <- attr(dats[[d]][,v], "valLabel")
+                                              if(!is.null(attr(dats[[d]][,v], "varLabel"))) {attr(datM[,v], "varLabel") <- attr(dats[[d]][,v], "varLabel")}
+                                              if(!is.null(attr(dats[[d]][,v], "valLabel"))) {attr(datM[,v], "valLabel") <- attr(dats[[d]][,v], "valLabel")}
                                          }
                                     }
                                }
