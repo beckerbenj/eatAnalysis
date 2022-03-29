@@ -8,7 +8,8 @@ wtdHetcor(
   dataFrame,
   vars = NULL,
   weights = NULL,
-  out = c("wide", "long", "both")
+  out = c("wide", "long", "both"),
+  triangular = FALSE
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ assumed, i.e. all weights are defaulted to 1.}
 
 \item{out}{Specifies the output format. \code{"wide"} gives a classical correlation matrix,
 \code{"long"} gives a long format table which includes the type of correlation.}
+
+\item{triangular}{Logical: should the wide-format matrix be arranged in triangular shape?}
 }
 \value{
 a correlation table or a list

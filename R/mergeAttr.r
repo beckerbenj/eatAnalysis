@@ -5,9 +5,13 @@
 #############################################################################
 #' Merge Two Data Frames and maintain variable attributes.
 #'
-#' This is a wrapper for the \code{merge} function from the \code{base}
-#' package. \code{merge} does not maintain variable attributes. \code{mergeAttr} might
-#' be useful if variable attributes should be maintained.
+#' This is a wrapper for the \code{\link[base]{merge}} function. \code{merge}
+#' does not maintain variable attributes. \code{mergeAttr} might be useful if variable
+#' attributes should be maintained. For example, if SPSS data are imported via
+#' \code{\link[foreign]{read.spss}}, variable and value labels are stored
+#' as attributes which get lost if data are merged subsequently. Moreover, function gives
+#' additional messages if (combination of) by-variables are not unique in at least one data.frame,
+#' or if by-variables have different classes.
 #'
 #'@param x first data frame to be merged.
 #'@param y second data frame to be merged.
@@ -32,6 +36,12 @@
 #'@param homoClass Logical: Beginning with R version 3.5, \code{merge} may give an error if the class of the
 #'by-variables differs in both data.frames. If TRUE, class of by-variable(s) will be homogenized
 #'before merging.
+#'@param unitName Optional: Set the name for the unit variable to get more informative messages. This is mainly
+#'relevant if \code{mergeAttr} is called from other functions.
+#'@param xName Optional: Set the name for the x data.frame to get more informative messages. This is mainly
+#'relevant if \code{mergeAttr} is called from other functions.
+#'@param yName Optional: Set the name for the y data.frame to get more informative messages. This is mainly
+#'relevant if \code{mergeAttr} is called from other functions.
 #'
 #'@return A \code{data.frame}. See the help page of \code{merge} for further details. .
 #'
@@ -39,28 +49,41 @@
 #'
 #'@examples
 #'### data frame 1, variable 'y' with variable.label 'test participation'
-#'df1 <- data.frame ( id = 1:3, sex = factor ( c("male", "male", "female")), y = c(TRUE,FALSE,FALSE))
+#'df1 <- data.frame ( id = 1:3, sex = factor ( c("male", "male", "female")),
+#'       y = c(TRUE,FALSE,FALSE))
 #'attr(df1[,"y"], "variable.label") <- "test participation"
-#'
 #'### data frame 2 without labels
-#'df2 <- data.frame ( id = c(2,4), status = factor ( c("married", "single")), z = c(TRUE,FALSE))
-#'
+#'df2 <- data.frame ( id = as.factor(c(2,4)), status = factor ( c("married", "single")),
+#'       z = c(TRUE,FALSE))
 #'### lost label after merging
 #'df3 <- merge(df1, df2, all = TRUE)
 #'attr(df3[,"y"], "variable.label")
-#'
 #'### maintain label
 #'df4 <- mergeAttr(df1, df2, all = TRUE, onlyVarValLabs = FALSE)
 #'attr(df4[,"y"], "variable.label")
+#'### adapt messages
+#'df5 <- mergeAttr(df1, df2, all = TRUE, onlyVarValLabs = FALSE, unitName = "student",
+#'       xName = "student questionnaire", yName = "school questionnaire")
 #'@export
-mergeAttr <- function ( x, y, by = intersect(names(x), names(y)), by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all, sort = TRUE, suffixes = c(".x",".y"), setAttr = TRUE, onlyVarValLabs = TRUE, homoClass = TRUE) {
+### mergen mit Attributen, das kann 'merge()' nicht:
+### http://stackoverflow.com/questions/20306853/maintain-attributes-of-data-frame-columns-after-merge
+mergeAttr <- function ( x, y, by = intersect(names(x), names(y)), by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all, sort = TRUE, suffixes = c(".x",".y"), setAttr = TRUE, onlyVarValLabs = TRUE, homoClass = TRUE, unitName = "unit", xName = "x", yName = "y") {
+     ### das muessen data.frames sein
+             if(length(class(x))>1 || !"data.frame" %in% class(x)) {
+                message(paste0("'",xName,"' must be a data.frame. Convert '",xName,"' to data.frame by applying `as.data.frame(x)`.") )
+                x <- as.data.frame(x)
+             }
+             if(length(class(y))>1 || !"data.frame" %in% class(y)) {
+                message("'",yName,"' must be a data.frame. Convert '",yName,"' to data.frame by applying `as.data.frame(y)`.")
+                y <- as.data.frame(y)
+             }
              byvars<- data.frame ( x=by.x, y=by.y, clx = sapply(x[,by.x,drop=FALSE], class), cly = sapply(y[,by.y,drop=FALSE], class), stringsAsFactors = FALSE)
      ### pruefen, ob die level der by-variablen in dem anderen datensatz enthalten sind
              levs  <- apply(X=byvars, MARGIN = 1, FUN = function (v) {
                       nix <- setdiff(unique(y[,v[["y"]]]), unique(x[,v[["x"]]]))
-                      if(length(nix)>0) {cat(paste0(length(nix), " unit(s) of merging variable '",v[["y"]],"' from data set 'y' not included in data set 'x'.\n"))}
+                      if(length(nix)>0) {cat(paste0(length(nix), " ",unitName,"(s) of merging variable '",v[["y"]],"' from data set '",yName,"' not included in data set '",xName,"'.\n"))}
                       niy <- setdiff(unique(x[,v[["x"]]]), unique(y[,v[["y"]]]))
-                      if(length(niy)>0) {cat(paste0(length(niy), " unit(s) of merging variable '",v[["x"]],"' from data set 'x' not included in data set 'y'.\n"))} })
+                      if(length(niy)>0) {cat(paste0(length(niy), " ",unitName,"(s) of merging variable '",v[["x"]],"' from data set '",xName,"' not included in data set '",yName,"'.\n"))} })
      ### pruefen, ob die level der by-variablen unique sind
              if ( nrow(byvars)>1) {
                    xby <- unlist(plyr::alply(x, .margins = 1, .fun = function (z) {paste(as.vector(unlist(set.col.type(z[,byvars[,"x"]], col.type = list("character" = byvars[,"x"])))),collapse="_")}))
@@ -69,8 +92,8 @@ mergeAttr <- function ( x, y, by = intersect(names(x), names(y)), by.x = by, by.
                    xby <- x[,byvars[1,"x"]]
                    yby <- y[,byvars[1,"y"]]
              }
-             if ( length(xby) != length(unique(xby))) { cat("Merging levels are not unique in data set 'x'.\n")}
-             if ( length(yby) != length(unique(yby))) { cat("Merging levels are not unique in data set 'y'.\n")}
+             if ( length(xby) != length(unique(xby))) { cat("Merging levels are not unique in data set '",xName,"'.\n")}
+             if ( length(yby) != length(unique(yby))) { cat("Merging levels are not unique in data set '",yName,"'.\n")}
      ### von allen by-variablen die Klassen homogenisieren, falls gewuenscht
              for ( i in 1:nrow(byvars) ) {
                    if ( length(unique(unlist(byvars[i,c("clx", "cly")]))) > 1 ) {

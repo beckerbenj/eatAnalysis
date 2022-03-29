@@ -41,10 +41,12 @@ modified. The function might be beneficial if aggregation information from the I
 }
 \details{
 The function use a rather simple aggregation rule: all variables which share a common ``stem''
-are considered to belong together. The ``stem'' is everything except the last sign. The item
-is considered to be correct if all variables are correct. See examples for further details.
-Note: if \code{inputList} is specified, aggregation rules are executed as specified in the
-ZKD input list.
+are considered to belong together. The ``stem'' is everything except the last sign. By convention,
+the last sign may be a letter in ascending order, for example \code{"I1a", "I1b", "I1c"}. However,
+\code{"I12", "I1_", "I1j"} is also possible although less convenient. The item \code{"I1"} consists
+of three variables and is considered to be correct if all variables are correct. See examples for
+further details. Note: if \code{inputList} is specified, aggregation rules are executed as specified
+in the ZKD input list.
 }
 \examples{
 ### create artificial data
@@ -56,7 +58,4 @@ colnames(dat)[-1] <- c("I1a", "I1b", "I1c", "I2a", "I3a", "I3b",
                        "I4a", "I5a", "I6a", "I6b")
 agg <- aggregateDataOld(dat, -1)
 
-}
-\author{
-Sebastian Weirich
 }

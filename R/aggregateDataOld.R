@@ -8,10 +8,12 @@
 #' modified. The function might be beneficial if aggregation information from the IQB database is not available.
 #'
 #' The function use a rather simple aggregation rule: all variables which share a common ``stem''
-#' are considered to belong together. The ``stem'' is everything except the last sign. The item
-#' is considered to be correct if all variables are correct. See examples for further details.
-#' Note: if \code{inputList} is specified, aggregation rules are executed as specified in the
-#' ZKD input list.
+#' are considered to belong together. The ``stem'' is everything except the last sign. By convention,
+#' the last sign may be a letter in ascending order, for example \code{"I1a", "I1b", "I1c"}. However,
+#' \code{"I12", "I1_", "I1j"} is also possible although less convenient. The item \code{"I1"} consists
+#' of three variables and is considered to be correct if all variables are correct. See examples for
+#' further details. Note: if \code{inputList} is specified, aggregation rules are executed as specified
+#' in the ZKD input list.
 #'
 #'@param all.daten A data frame in the wide format with at least two (dichotomous) variable columns.
 #'@param spalten Column names or numbers with variables to aggregate.
@@ -25,8 +27,6 @@
 #'@return A list. First element is a data frame with sum scores. Second element is a data frame
 #'with aggregated scores. Third element is a data frame with information how many variables
 #'are summarized for each item.
-#'
-#'@author Sebastian Weirich
 #'
 #'@examples
 #' ### create artificial data

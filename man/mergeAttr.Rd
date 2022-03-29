@@ -17,7 +17,10 @@ mergeAttr(
   suffixes = c(".x", ".y"),
   setAttr = TRUE,
   onlyVarValLabs = TRUE,
-  homoClass = TRUE
+  homoClass = TRUE,
+  unitName = "unit",
+  xName = "x",
+  yName = "y"
 )
 }
 \arguments{
@@ -56,30 +59,45 @@ stored by \code{\link{convertLabel}} will be restored. If FALSE, all variable at
 \item{homoClass}{Logical: Beginning with R version 3.5, \code{merge} may give an error if the class of the
 by-variables differs in both data.frames. If TRUE, class of by-variable(s) will be homogenized
 before merging.}
+
+\item{unitName}{Optional: Set the name for the unit variable to get more informative messages. This is mainly
+relevant if \code{mergeAttr} is called from other functions.}
+
+\item{xName}{Optional: Set the name for the x data.frame to get more informative messages. This is mainly
+relevant if \code{mergeAttr} is called from other functions.}
+
+\item{yName}{Optional: Set the name for the y data.frame to get more informative messages. This is mainly
+relevant if \code{mergeAttr} is called from other functions.}
 }
 \value{
 A \code{data.frame}. See the help page of \code{merge} for further details. .
 }
 \description{
-This is a wrapper for the \code{merge} function from the \code{base}
-package. \code{merge} does not maintain variable attributes. \code{mergeAttr} might
-be useful if variable attributes should be maintained.
+This is a wrapper for the \code{\link[base]{merge}} function. \code{merge}
+does not maintain variable attributes. \code{mergeAttr} might be useful if variable
+attributes should be maintained. For example, if SPSS data are imported via
+\code{\link[foreign]{read.spss}}, variable and value labels are stored
+as attributes which get lost if data are merged subsequently. Moreover, function gives
+additional messages if (combination of) by-variables are not unique in at least one data.frame,
+or if by-variables have different classes.
 }
 \examples{
 ### data frame 1, variable 'y' with variable.label 'test participation'
-df1 <- data.frame ( id = 1:3, sex = factor ( c("male", "male", "female")), y = c(TRUE,FALSE,FALSE))
+df1 <- data.frame ( id = 1:3, sex = factor ( c("male", "male", "female")),
+      y = c(TRUE,FALSE,FALSE))
 attr(df1[,"y"], "variable.label") <- "test participation"
-
 ### data frame 2 without labels
-df2 <- data.frame ( id = c(2,4), status = factor ( c("married", "single")), z = c(TRUE,FALSE))
-
+df2 <- data.frame ( id = as.factor(c(2,4)), status = factor ( c("married", "single")),
+      z = c(TRUE,FALSE))
 ### lost label after merging
 df3 <- merge(df1, df2, all = TRUE)
 attr(df3[,"y"], "variable.label")
-
 ### maintain label
 df4 <- mergeAttr(df1, df2, all = TRUE, onlyVarValLabs = FALSE)
 attr(df4[,"y"], "variable.label")
+### adapt messages
+df5 <- mergeAttr(df1, df2, all = TRUE, onlyVarValLabs = FALSE, unitName = "student",
+      xName = "student questionnaire", yName = "school questionnaire")
 }
 \author{
 Sebastian Weirich
