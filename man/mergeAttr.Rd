@@ -20,7 +20,8 @@ mergeAttr(
   homoClass = TRUE,
   unitName = "unit",
   xName = "x",
-  yName = "y"
+  yName = "y",
+  verbose = c("match", "unique", "class", "dataframe")
 )
 }
 \arguments{
@@ -68,6 +69,14 @@ relevant if \code{mergeAttr} is called from other functions.}
 
 \item{yName}{Optional: Set the name for the y data.frame to get more informative messages. This is mainly
 relevant if \code{mergeAttr} is called from other functions.}
+
+\item{verbose}{Optional: Choose whether messages concerning missing levels in by-variables should be printed
+on console (\code{"match"}), or messages concerning uniqueness of by-variables (\code{"unique"}),
+or messages concerning different classes of by-variables (\code{"class"}), or messages concerning
+appropriate class (\code{data.frame}) of \code{x} and \code{y} (\code{"dataframe"}). Multiple choices
+are possible, e.g. \code{verbose = c("match", "class")}. If \code{verbose = TRUE}, all
+messages are printed, if \code{verbose = FALSE}, no messages are printed at all. The default
+is equivalent to \code{verbose = TRUE}.}
 }
 \value{
 A \code{data.frame}. See the help page of \code{merge} for further details. .
@@ -79,25 +88,31 @@ attributes should be maintained. For example, if SPSS data are imported via
 \code{\link[foreign]{read.spss}}, variable and value labels are stored
 as attributes which get lost if data are merged subsequently. Moreover, function gives
 additional messages if (combination of) by-variables are not unique in at least one data.frame,
-or if by-variables have different classes.
+or if by-variables have different classes, or if some units of the by-variables are missing in
+one of the data sets. Users are free to specify which kind of messages are desirable.
 }
 \examples{
 ### data frame 1, variable 'y' with variable.label 'test participation'
 df1 <- data.frame ( id = 1:3, sex = factor ( c("male", "male", "female")),
-      y = c(TRUE,FALSE,FALSE))
-attr(df1[,"y"], "variable.label") <- "test participation"
+      happy = c("low", "low", "medium"))
+attr(df1[,"happy"], "variable.label") <- "happieness in the workplace"
+
 ### data frame 2 without labels
-df2 <- data.frame ( id = as.factor(c(2,4)), status = factor ( c("married", "single")),
-      z = c(TRUE,FALSE))
+df2 <- data.frame ( id = as.factor(c(2,2,4)), status = factor ( c("married", "married", "single")),
+      convicted = c(FALSE, FALSE, TRUE))
+
 ### lost label after merging
 df3 <- merge(df1, df2, all = TRUE)
-attr(df3[,"y"], "variable.label")
+attr(df3[,"happy"], "variable.label")
+
 ### maintain label
 df4 <- mergeAttr(df1, df2, all = TRUE, onlyVarValLabs = FALSE)
-attr(df4[,"y"], "variable.label")
+attr(df4[,"happy"], "variable.label")
+
 ### adapt messages
 df5 <- mergeAttr(df1, df2, all = TRUE, onlyVarValLabs = FALSE, unitName = "student",
-      xName = "student questionnaire", yName = "school questionnaire")
+      xName = "student questionnaire", yName = "school questionnaire",
+      verbose = c("match", "unique"))
 }
 \author{
 Sebastian Weirich
