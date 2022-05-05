@@ -65,8 +65,7 @@ target <- "N:/archiv/test"
 # codebook folder
 codebook <- "p:/R/Material/V3-2016_Codebook_Zoowaerter.xlsx"
 # variable list
-library(readxl)
-vars <- read_excel("p:/R/Material/KA3_Variablennamen_Zoowaerter.xlsx",
+vars <- readxl::read_excel("p:/R/Material/KA3_Variablennamen_Zoowaerter.xlsx",
                   sheet = "Tabelle1")
 vars <- substr(unique(unlist(vars)),1,7)
 # load data and reshape to the wide format

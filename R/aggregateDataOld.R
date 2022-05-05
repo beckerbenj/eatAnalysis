@@ -21,7 +21,7 @@
 #'@param printCases Logical: Specifies whether exhaustive aggregation information should be printed on console.
 #'@param printPattern Logical: Print the unexpected patterns to console?
 #'@param inputList Optional: Input list to differentiate between variables (sub items) and items. If \code{NULL},
-#'all variables in the data frame which share the same ID except for the kast sign are considered
+#'all variables in the data frame which share the same ID except for the last sign are considered
 #'to belong to the same item.
 #'
 #'@return A list. First element is a data frame with sum scores. Second element is a data frame
@@ -40,6 +40,7 @@
 #'
 #'@export
 aggregateDataOld <- function(all.daten, spalten, unexpected.pattern.as.na = TRUE, printCases = FALSE, printPattern = FALSE, inputList = NULL ) {
+  all.daten <- eatTools::makeDataFrame(all.daten)
   if(missing(spalten)) {spalten <- colnames(all.daten)}
   spalten <- eatTools::existsBackgroundVariables(dat = all.daten, variable=spalten)
   noAgg <- setdiff(colnames(all.daten), spalten)

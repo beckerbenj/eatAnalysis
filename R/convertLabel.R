@@ -22,7 +22,7 @@
 #'str(dat)
 #'@export
 convertLabel <- function ( spssList , stringsAsFactors = TRUE, useZkdConvention = TRUE) {
-  if ( "data.frame" %in% class(spssList )) { stop ( "'spssList' must not be of class 'data.frame'.\n")}
+  if(inherits(spssList, "data.frame")) {stop ( "'spssList' must not be of class 'data.frame'.\n")}
   varLabs<- attr(spssList, "variable.labels")
   valLabs<- lapply ( spssList, attr, "value.labels")
   if ( useZkdConvention == TRUE ) { zielnam <- c("varLabel", "valLabel") }  else  { zielnam <- c("variable.labels", "value.labels") }

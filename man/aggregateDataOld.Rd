@@ -25,7 +25,7 @@ aggregateDataOld(
 \item{printPattern}{Logical: Print the unexpected patterns to console?}
 
 \item{inputList}{Optional: Input list to differentiate between variables (sub items) and items. If \code{NULL},
-all variables in the data frame which share the same ID except for the kast sign are considered
+all variables in the data frame which share the same ID except for the last sign are considered
 to belong to the same item.}
 }
 \value{

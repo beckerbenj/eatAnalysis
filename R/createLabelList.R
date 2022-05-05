@@ -22,7 +22,7 @@
 #'atts <- createLabelList(dat)
 #'@export
 createLabelList <- function ( dfr, additionalAttributes = NULL ) {
-         stopifnot ( class(dfr) == "data.frame")
+         stopifnot ( inherits(dfr, "data.frame"))
          varList<- do.call(plyr::rbind.fill, lapply(colnames(dfr), FUN = function ( v ) {
                    lbs  <- attributes(dfr[,v])
                    if (!is.null(lbs[["varLabel"]]))  {
@@ -32,9 +32,9 @@ createLabelList <- function ( dfr, additionalAttributes = NULL ) {
                    }
                    if(!is.null(lbs[["valLabel"]]) && length(lbs[["valLabel"]])>0)  {
                         vals <- data.frame ( value = as.vector(unlist(lbs[["valLabel"]])), valLabel = names(lbs[["valLabel"]]), stringsAsFactors = FALSE)
-                        ret <- data.frame ( varName = v, class = class(dfr[,v]), varLabel = varLab , vals[,c("value", "valLabel")], stringsAsFactors = FALSE)
+                        ret <- data.frame ( varName = v, class = paste(class(dfr[,v]), collapse=", "), varLabel = varLab , vals[,c("value", "valLabel")], stringsAsFactors = FALSE)
                    }  else  {
-                        ret <- data.frame ( varName = v, class = class(dfr[,v]), varLabel = varLab , stringsAsFactors = FALSE)
+                        ret <- data.frame ( varName = v, class = paste(class(dfr[,v]), collapse=", "), varLabel = varLab , stringsAsFactors = FALSE)
                    }
                    if (!is.null(additionalAttributes)) {
                         for ( i in additionalAttributes) {
