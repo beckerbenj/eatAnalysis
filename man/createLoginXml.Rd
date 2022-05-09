@@ -16,7 +16,8 @@ createLoginXml(
   sep = "_",
   booklet,
   mode = "run-hot-return",
-  login.mode = "monitor-group"
+  login.mode = "monitor-group",
+  cslb = 5
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ number of the group variable in \code{dat}. If specified, missing values are not
 \item{mode}{single string (length 1) for the desired mode entry in the xml files. See example.}
 
 \item{login.mode}{single string (length 1) for the desired login mode entry in the xml files. See example.}
+
+\item{cslb}{class size lower boundary: if classes have less than \code{cslb} students, a warning is given.}
 }
 \value{
 No return, the files will be written on disk.

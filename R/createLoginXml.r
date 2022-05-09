@@ -17,6 +17,7 @@
 #'@param booklet single string (length 1) for the desired booklet entry in the xml files. See example.
 #'@param mode single string (length 1) for the desired mode entry in the xml files. See example.
 #'@param login.mode single string (length 1) for the desired login mode entry in the xml files. See example.
+#'@param cslb class size lower boundary: if classes have less than \code{cslb} students, a warning is given.
 #'
 #'@return No return, the files will be written on disk.
 #'
@@ -27,7 +28,7 @@
 #'    dir = tempdir(), prefix = "logins", sep="_",booklet = "V8DeuTBAPilot2022TH15Faultier")
 #'
 #'@export
-createLoginXml <- function(dat, login, password, label, group = NULL, class = "Klasse", dir, prefix = "test", sep="_", booklet, mode="run-hot-return", login.mode = "monitor-group") {
+createLoginXml <- function(dat, login, password, label, group = NULL, class = "Klasse", dir, prefix = "test", sep="_", booklet, mode="run-hot-return", login.mode = "monitor-group", cslb = 5) {
      ### 'dat' muss data.frame sein
           dat   <- eatTools::makeDataFrame(dat)
           allVar<- list(login=login, password=password, label=label, group=group, class=class)
@@ -39,17 +40,27 @@ createLoginXml <- function(dat, login, password, label, group = NULL, class = "K
               dir.create(dir, recursive = TRUE)
           }
      ### fuer jede gruppe separat. wenn es keine gruppen gibt, werden sie kuenstlich erzeugt, um mit by drueberschleifen zu koennen
-          if (is.null(group)) {dat[,"grp"] <- 1; allVar[["group"]] <- "grp"}
+          if (is.null(group)) {dat[,"grp"] <- 1; allNam[["group"]] <- "grp"}
      ### unerlaubte Zeichen aus labels loeschen
-          dat[,allVar[["label"]]] <- gsub("_|\\.|-|/", "", as.character(dat[,allVar[["label"]]]) )
-          xml   <- by(data = dat, INDICES = dat[,allVar[["group"]]], FUN = function (subdat){
-                   stopifnot(length(unique(subdat[,allVar[["class"]]])) == 2)
-                   stopifnot(min(table(subdat[,allVar[["class"]]])) == 1)
-                   stopifnot(length(unique(subdat[,allVar[["label"]]])) == 1)
-                   tlid<- names(sort(table(subdat[,allVar[["class"]]])))[1]
-                   pre <- c("<?xml version=\"1.0\"?>", "<Testtakers>", "<Metadata>", "</Metadata>", paste("<Group id=\"",subdat[1,allVar[["group"]]],"\" label=\"",subdat[1,allVar[["label"]]],"\">", sep=""))
-                   main<- paste0("<Login name=\"",subdat[which(subdat[,allVar[["class"]]] != tlid),allVar[["login"]]],"\" mode=\"",mode,"\" pw=\"",subdat[which(subdat[,allVar[["class"]]] != tlid),allVar[["password"]]],"\"> \n <Booklet>",booklet,"</Booklet> \n </Login>")
-                   post<- c(paste0("<Login mode=\"",login.mode,"\" name=\"",subdat[which(subdat[,allVar[["class"]]] == tlid),allVar[["login"]]],"\" pw=\"",subdat[which(subdat[,allVar[["class"]]] == tlid),allVar[["password"]]],"\">"),"</Login>",	"</Group>","</Testtakers>")
-                   all <- c(pre, main, post)
-                   nam <- paste0(paste(prefix,unique(subdat[,allVar[["label"]]]), sep=sep), ".xml")
-                   write(all, file = file.path(dir, nam), sep="\n")  }) }
+          dat[,allNam[["label"]]] <- gsub("_|\\.|-|/", "", as.character(dat[,allNam[["label"]]]) )
+          xml   <- by(data = dat, INDICES = dat[,allNam[["group"]]], FUN = function (subdat){
+                   if (nrow(subdat)>0) {
+                       tlid<- checkXmlClass(subdat, an=allNam, cslb=cslb)
+                       pre <- c("<?xml version=\"1.0\"?>", "<Testtakers>", "<Metadata>", "</Metadata>", paste("<Group id=\"",subdat[1,allNam[["group"]]],"\" label=\"",subdat[1,allNam[["label"]]],"\">", sep=""))
+                       main<- paste0("<Login name=\"",subdat[which(subdat[,allNam[["class"]]] != tlid),allNam[["login"]]],"\" mode=\"",mode,"\" pw=\"",subdat[which(subdat[,allNam[["class"]]] != tlid),allNam[["password"]]],"\"> \n <Booklet>",booklet,"</Booklet> \n </Login>")
+                       post<- c(paste0("<Login mode=\"",login.mode,"\" name=\"",subdat[which(subdat[,allNam[["class"]]] == tlid),allNam[["login"]]],"\" pw=\"",subdat[which(subdat[,allNam[["class"]]] == tlid),allNam[["password"]]],"\">"),"</Login>",	"</Group>","</Testtakers>")
+                       all <- c(pre, main, post)
+                       nam <- paste0(paste(prefix,unique(subdat[,allNam[["label"]]]), sep=sep), ".xml")
+                       write(all, file = file.path(dir, nam), sep="\n")}  }) }
+
+### Hilfsfunktion fuer createLoginXml()
+checkXmlClass <- function ( d, an, cslb) {
+     ### Anzahl Kinder in Klasse
+          if(nrow(d) < 2) {stop(paste0("Group '",unique(d[,an[["group"]]]), "' with only ",nrow(d) , " unit(s)."))}
+          if(nrow(d) <= cslb) {warning(paste0("Group '",unique(d[,an[["group"]]]), "' with only ",nrow(d) , " unit(s)."))}
+     ### zwei units pro Klasse erlaubt
+          if(!length(unique(d[,an[["class"]]])) == 2) {stop(paste0("Group '",unique(d[,an[["group"]]]),"'. Expect 2 distinct entries in '",an[["group"]],"' columns, found ",length(unique(d[,an[["class"]]])),": '",paste(unique(d[,an[["class"]]]), collapse="', '"),"'."))}
+     ### eine unit darf genau einmal vorkommen
+          if(!min(table(d[,an[["class"]]])) == 1) {cat(paste0("Error: One of the two occurrences in column '",an[["class"]],"' of group '",unique(d[,an[["group"]]]),"' must have frequency 1. Frequencies found:")); print(table(d[,an[["class"]]])); stop()}
+          ret <- names(sort(table(d[,an[["class"]]])))[1]
+          return(ret)}
