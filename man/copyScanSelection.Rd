@@ -15,12 +15,14 @@ copyScanSelection(
   sheet = "Codebook",
   varColumn = "Variable",
   bookletColumnPrefix = "TH",
+  exclude = c("mbd", "mnr", "mci", "mnr", "mir", "mbi", "9", "97", "98", "99", "7",
+    "8"),
   separators = c("-", "_"),
   suffix = ".TIF"
 )
 }
 \arguments{
-\item{vars}{character string of variables whose scans should be copied.}
+\item{vars}{character string of variables whose scans should be copied. If missing, all available variables will be used.}
 
 \item{dat}{wide format data which contain these variables. Names in \code{vars} must match column names of \code{dat}.}
 
@@ -44,17 +46,23 @@ Only necessary if \code{codebook} was provided as character string.}
 \item{bookletColumnPrefix}{Character string of the booklet identifier prefix in the codebook. The codebook
 usually contains several booklet columns which should begin with a common identifier.}
 
+\item{exclude}{Character string of codes which should be ignored for selection. If all codes should
+be used, type \code{exclude = ""} or \code{exclude = NULL}.}
+
 \item{separators}{Character strings which separates booklet identifier and person identifier in the
 filenames of the scans.}
 
-\item{suffix}{Suffix of the filenames of the scans.}
+\item{suffix}{Suffix of the filenames of the scans. If the scan files have multiple suffixes, you
+can use \code{suffix = ".TIF|.tif"}, fo example.}
 }
 \value{
 No return, the files will be written on disk.
 }
 \description{
-Functions allows to copy the scans of a selection of variables,
-sort by variable codes, into a desired directory.
+Functions allows to copy the scans of a subset of variables,
+sort by variable codes, into a desired directory. This might be useful, if,
+for example, all scans where variable \code{"D122a"} was scored with 1 (correct)
+should be collected in a common folder.
 }
 \examples{
 \dontrun{
