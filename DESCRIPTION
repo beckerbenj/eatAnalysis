@@ -1,14 +1,14 @@
 Package: eatAnalysis
 Type: Package
 Title: Convenience function for various analysis types
-Version: 0.3.8
+Version: 0.3.9
 Authors@R: c(
     person("Benjamin", "Becker", email = "b.becker@iqb.hu-berlin.de", role = c("aut", "cre")),
     person("Sebastian Weirich", role = c("aut")),
     person("Karoline", "Sachse", role = c("ctb")))
 Description: Helper functions for descriptive analysis, writing to files and file management.
 Depends: R (>= 3.5.0)
-Imports: stats, methods, utils, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0), boot, Matrix, combinat, eatTools (>= 0.7.2), wCorr, xtable, readxl
+Imports: stats, methods, utils, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0), boot, Matrix, combinat, eatTools (>= 0.7.4), wCorr, xtable, readxl
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

@@ -46,19 +46,19 @@ aggregateDataOld <- function(all.daten, spalten, unexpected.pattern.as.na = TRUE
   noAgg <- setdiff(colnames(all.daten), spalten)
   daten <- all.daten[,spalten, drop=FALSE]
   foo   <- table(nchar(colnames(daten)))                                  ### Haben alle Variablennamen die gleiche Anzahl Zeichen?
-  if(length(foo)>1) {cat("Variable names with mixed numbers of characters.\n")}
+  if(length(foo)>1) {message("Variable names with mixed numbers of characters.")}
   if (is.null(inputList) ) {
     items  <- unique(substr(colnames(daten),1,nchar(colnames(daten))-1))### wieviele Items wird es geben?
   }  else  {
     nag    <- setdiff ( spalten, inputList[["subunits"]][,"subunit"])   ### no aggregation rule
     if ( length( nag) > 0 ) {
-      cat(paste0("Warning: Following ",length(nag), " item(s) without aggregation rule in ZKD input list:\n   '",paste(nag, collapse = "', '"), "'.\nThese item(s) won't be aggregated.\n"))
+      warning(paste0("Following ",length(nag), " variables(s) without aggregation rule in ZKD input list:\n   '",paste(nag, collapse = "', '"), "'.\nThese varables(s) won't be aggregated to items."))
       noAgg <- c(noAgg, nag)
       daten <- all.daten[,setdiff ( spalten,nag), drop=FALSE]
     }
     items  <- unique(inputList[["subunits"]][which(inputList[["subunits"]][,"subunit"] %in% colnames(daten)),"unit"])
   }
-  cat(paste("Aggregate ",ncol(daten)," variable(s) to ",length(items)," item(s).\n",sep="")); utils::flush.console()
+  message(paste0("Aggregate ",ncol(daten)," variable(s) to ",length(items)," item(s)."))
   dat.sum <- NULL; dat.agg <- NULL; list.pc <- NULL                       ### erstelle leere Datenobjekte fuer Summendatensatz, aggregierten Datensatz und Liste mit partial-credit-Items
   for (i in 1:length(items))      {
     if ( is.null(inputList)) {
@@ -66,7 +66,7 @@ aggregateDataOld <- function(all.daten, spalten, unexpected.pattern.as.na = TRUE
       last.sign <- names(table(substr(colnames(sub.dat),nchar(colnames(sub.dat)),nchar(colnames(sub.dat)))))
       toCheck   <- sum((last.sign)==letters[1:length(last.sign)])==length(last.sign)
       ### Check: Ist das letzte Zeichen des Variablennamens immer ein Buchstabe und aufsteigend?
-      if(!toCheck) { cat(paste("Item ",items[i],": last character of variable names does not correspond to assumed alphabetic sequence.\n", sep="")); utils::flush.console()}
+      if(!toCheck) { message(paste0("Item ",items[i],": last character of variable names does not correspond to assumed alphabetic sequence."))}
     }  else  {
       sub.dat <- data.frame ( lapply( data.frame(daten[,inputList[["subunits"]][which(inputList[["subunits"]][,"unit"] == items[i]),"subunit"], drop = FALSE], stringsAsFactors = FALSE), as.numeric), stringsAsFactors = FALSE)
     }
@@ -77,7 +77,7 @@ aggregateDataOld <- function(all.daten, spalten, unexpected.pattern.as.na = TRUE
     # if ( substr(colnames(sub.dat)[1], 1, 8) == "M3621603") {browser()}
     if( length( unexpected ) > 0  )   {
       cases      <- sum(as.numeric(isNA[as.character(unexpected)]))
-      cat(paste("Caution! Found unexpected missing pattern in variables for item ",items[i], " in ",cases," cases.\n", sep= "" ) ) ; utils::flush.console()
+      message(paste0("Caution! Found unexpected missing pattern in variables for item ",items[i], " in ",cases," cases.") )
       whichUnexp <- which( rowSums(is.na(sub.dat)) %in% unexpected)
       if (printCases)   {cat("   Cases in question: "); cat(paste(whichUnexp, collapse=", ")); cat("\n")}
       if (printPattern) {

@@ -37,8 +37,8 @@ numeric and ordinal variables, and polychoric correlations between ordinal varia
 }
 \details{
 Variables in the data.frame should be accordingly classified as numeric or factor variables.
-Function resembles the \code{hetcor} function from the \code{polycor} package, but allows
-for incorporating weights. For this purpose, the function makes use of the \code{weightedCorr}
+Function resembles the \code{\link[polycor]{hetcor}} function from the \code{polycor} package, but allows
+for incorporating weights. For this purpose, the function makes use of the \code{\link[wCorr]{weightedCorr}}
 function from the \code{wCorr} package.
 }
 \examples{
