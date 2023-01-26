@@ -15,8 +15,7 @@ copyScanSelection(
   sheet = "Codebook",
   varColumn = "Variable",
   bookletColumnPrefix = "TH",
-  exclude = c("mbd", "mnr", "mci", "mnr", "mir", "mbi", "9", "97", "98", "99", "7",
-    "8"),
+  exclude = c("mbd", "mnr", "mci", "mnr", "mir", "mbi", "9", "97", "98", "99", "7", "8"),
   separators = c("-", "_"),
   suffix = ".TIF"
 )

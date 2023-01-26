@@ -9,6 +9,7 @@ aggregateDataOldL(
   idCol,
   varCol,
   valueCol,
+  varExclude = NULL,
   itemColName = "item",
   unexpected.pattern.as.na = TRUE,
   printCases = FALSE,
@@ -24,6 +25,8 @@ aggregateDataOldL(
 \item{varCol}{Name or number of the variable identifier column in the long format data}
 
 \item{valueCol}{Name or number of the variable response column in the long format data}
+
+\item{varExclude}{Optional: Numeric vector of variables which are to be excluded from aggregation in any case}
 
 \item{itemColName}{Name of the item identifier column in the newly created aggregated data.frame. Name must not occur in the current data.frame.}
 

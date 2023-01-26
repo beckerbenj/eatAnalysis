@@ -19,8 +19,8 @@
 #'@param datLong A data frame in the long format with at least three columns: person identifier, varable identifier and response.
 #'@param idCol Name or number of the person identifier column in the long format data
 #'@param varCol Name or number of the variable identifier column in the long format data
-
 #'@param valueCol Name or number of the variable response column in the long format data
+#'@param varExclude Optional: Numeric vector of variables which are to be excluded from aggregation in any case
 #'@param itemColName Name of the item identifier column in the newly created aggregated data.frame. Name must not occur in the current data.frame.
 #'@param unexpected.pattern.as.na Logical: TRUE, if non-valid patterns should be aggregated to NA.
 #'@param printCases Logical: Specifies whether exhaustive aggregation information should be printed on console.
@@ -46,7 +46,7 @@
 #' agg <- aggregateDataOldL(datL,idCol="id", varCol="variable", valueCol="value")
 #'
 #'@export
-aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, itemColName = "item", unexpected.pattern.as.na = TRUE, printCases = FALSE, printPattern = FALSE, inputList = NULL ) {
+aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, varExclude = NULL, itemColName = "item", unexpected.pattern.as.na = TRUE, printCases = FALSE, printPattern = FALSE, inputList = NULL ) {
         datLong     <- eatTools::makeDataFrame(datLong)
         allVars     <- list(idCol = idCol, varCol = varCol, valueCol=valueCol)
         all.Names   <- lapply(allVars, FUN=function(ii) {eatTools::existsBackgroundVariables(dat = datLong, variable=ii)})
@@ -62,20 +62,29 @@ aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, itemColName = "i
             nag    <- setdiff ( unique(as.character(datLong[,all.Names[["varCol"]]])), inputList[["subunits"]][,"subunit"])
             if ( length( nag) > 0 ) {
                 warning(paste0("Following ",length(nag), " from ",length(unique(as.character(datLong[,all.Names[["varCol"]]])))," variables(s) without aggregation rule in ZKD input list:\n   '",paste(nag, collapse = "', '"), "'.\nThese varables(s) won't be aggregated to items."))
-                datLong[,"aggregationRule"] <- TRUE
-                datLong[eatTools::whereAre(nag, datLong[, all.Names[["varCol"]] ], verbose=FALSE) ,"aggregationRule"] <- FALSE
             }                                                                   ### Wenn es zwar eine zkd-Inputliste gibt, aber fuer manche Items keine Aggregierungsvorschrift,
             items  <- unique(inputList[["subunits"]][which(inputList[["subunits"]][,"subunit"] %in% unique(as.character(datLong[,all.Names[["varCol"]]]))),c("subunit", "unit")])
+            if ( nrow(items) != length(unique(items[,1])) ) {stop("'subunit' column of <inputList>$subunits is not unique.")}
             colnames(items) <- c(all.Names[["varCol"]],itemColName)             ### werden die Items nicht nach Standardaggregierung aggregiert, sondern gar nicht.
             datLong<- eatTools::mergeAttr(datLong, items, by = all.Names[["varCol"]], all.x = TRUE, all.y = FALSE, setAttr=FALSE)
-        }                                                                       ### Es werden dann einfach die Variablen uebernommen. Das mergen setzt NAs in der Itemspalte,
-        missingItem <- which(is.na(datLong[,itemColName]))                      ### wenn es keine Aggregierungsvorschrift gibt. Die NAs werden dann mit dem Wert der Variablenspalte aufgefuellt
-        if(length(missingItem)>0) {datLong[missingItem,itemColName] <- datLong[missingItem,all.Names[["varCol"]]]}
+            datLong[,"aggregationRule"] <- car::recode(datLong[,"item"], "NA=FALSE; else=TRUE")
+            if(length(which(is.na(datLong[,itemColName])))>0) {datLong[which(is.na(datLong[,itemColName])),itemColName] <- datLong[which(is.na(datLong[,itemColName])),all.Names[["varCol"]]]}
+        }                                                                       ### Es werden dann einfach die Variablen uebernommen. Das mergen setzt NAs in der Itemspalte, wenn es keine Aggregierungsvorschrift gibt. Die NAs werden dann mit dem Wert der Variablenspalte aufgefuellt
+     ### Die Variablen, die NICHT aggregiert werden sollen, schreibt man einfach 1:1 in die itemspalte, dann landen sie unten bei noAgg
+        if(!is.null(varExclude)) {
+            if(!inherits(varExclude, "character")) {stop("'varExclude' must be a character vector.")}
+            if(length(varExclude) != length(unique(varExclude))) {message("'varExclude' include duplicated elements. Use only unique elements.")}
+            comm <- intersect(unique(varExclude), unique(datLong[,all.Names[["varCol"]]]))
+            if ( length(comm) != length(unique(varExclude))) {message(paste0("Elements '", paste(setdiff(unique(varExclude),unique(datLong[,all.Names[["varCol"]]])), collapse="', '"), "' do not occur in data.frame."))}
+            if ( length(comm)>0) {
+                 datLong[eatTools::whereAre(comm, datLong[,all.Names[["varCol"]]], verbose=FALSE),itemColName] <- datLong[eatTools::whereAre(comm, datLong[,all.Names[["varCol"]]], verbose=FALSE),all.Names[["varCol"]]]
+            }
+        }
      ### jetzt checken: welche muessen aggregiert werden, welche koennen einfach so uebernommen werden?
         toAgg       <- names(which(rowSums(table(datLong[,c(itemColName,all.Names[["varCol"]])]) != 0)>1))
         noAgg       <- setdiff(unique(as.character(datLong[,itemColName])), toAgg)
         message(paste0("Overall: ",length(unique(as.character(datLong[,all.Names[["varCol"]]]))), " variables, ", length(unique(as.character(datLong[,itemColName]))), " items. Aggregate ", length(unique(datLong[which(datLong[,itemColName] %in% toAgg), all.Names[["varCol"]]])), " variables to ", length(toAgg) , " items."))
-        if (printCases) { print(table(facToChar(datLong[which(datLong[,itemColName] %in% toAgg),c(all.Names[["varCol"]], itemColName)]))) }
+        if (printCases) { print(table(eatTools::facToChar(datLong[which(datLong[,itemColName] %in% toAgg),c(all.Names[["varCol"]], itemColName)]))) }
      ### nicht zu aggregierende Daten sammeln
         datNoAgg    <- datLong[which(datLong[,itemColName] %in% noAgg),]
         datNoAgg    <- data.frame ( datNoAgg, valueSum = datNoAgg[,all.Names[["valueCol"]]], valueAgg = datNoAgg[,all.Names[["valueCol"]]], partialCredit=FALSE, valueMax = NA, stringsAsFactors = FALSE)
@@ -84,7 +93,7 @@ aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, itemColName = "i
      ### wenn der Datensatz allerdings so gestaltet ist, dass es im langformat NAs gibt, dann koennen diese pattern auch so auftreten.
      ### es gibt also zweierlei moeglichkeiten, wie diese pattern im Datensatz auftreten koennen ... schwierig ...
         datAgg      <- doAggLong(datLong=datLong, all.Names=all.Names,itemColName=itemColName,printPattern=printPattern, toAgg=toAgg, printCases=printCases, unexpected.pattern.as.na=unexpected.pattern.as.na, inputList=inputList)
-        datAgg      <- eatTools::rbind_common(datNoAgg, do.call("rbind", datAgg))
+        datAgg      <- eatTools::rbind_common(datNoAgg, do.call(eatTools::rbind_common, datAgg))
         return(datAgg)}
 
 doAggLong <- function(datLong, all.Names,itemColName,printPattern, toAgg, printCases, unexpected.pattern.as.na, inputList){
