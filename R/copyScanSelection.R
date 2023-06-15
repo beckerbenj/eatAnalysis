@@ -23,7 +23,8 @@
 #'usually contains several booklet columns which should begin with a common identifier.
 #'@param exclude Character string of codes which should be ignored for selection. If all codes should
 #'be used, type \code{exclude = ""} or \code{exclude = NULL}.
-#'@param separators Character strings which separates booklet identifier and person identifier in the
+#'@param separators Two character strings must be given: First string separates booklet identifier and page identifier in the
+#'filenames of the scans. Second string separates page identifier from person identifier in the
 #'filenames of the scans.
 #'@param suffix Suffix of the filenames of the scans. If the scan files have multiple suffixes, you
 #'can use \code{suffix = ".TIF|.tif"}, fo example.
@@ -68,9 +69,17 @@ copyScanSelection <- function ( vars, dat, id, sourceDir, targetDir, codebook, s
     }
     allV <- list(ID = id, variablen=vars )
     allN <- lapply(allV, FUN=function(ii) {eatTools::existsBackgroundVariables(dat = dat, variable=ii)})
-    if (is.character(codebook)) {codebook <- data.frame ( readxl::read_excel(codebook, sheet = "Codebook", skip = startRow-1, col_types = "text"), stringsAsFactors = FALSE) }
+    if (is.character(codebook)) {
+        codebook <- eatTools::makeDataFrame ( readxl::read_excel(codebook, sheet = "Codebook", skip = startRow-1, col_types = "text"), name="codebook")
+    }  else  {
+        codebook <- eatTools::makeDataFrame ( codebook, name="codebook")
+    }
+    ind  <- grep(paste0("^", bookletColumnPrefix), colnames(codebook))          ### check ob bookletColumnPrefix in Codebook gefunden wird
+    if ( length(ind) == 0 ) {
+        stop(paste0("Cannot found bookletColumnPrefix '",bookletColumnPrefix, "' in column names of codebook."))
+    }
     liste<- do.call("rbind", lapply (allN[["variablen"]], FUN = function (va) {
-            codes <- setdiff(unique(dat[,va]), unique(eatTools::crop(exclude)))
+            codes <- setdiff(unique(dat[,va]), unique(crop(exclude)))
             if ( length(codes) == 0) {
                  message(paste0("Variable '",va,"': no valid codes remain. All codes of '",va,"' ('",paste(unique(dat[,va]), collapse="', '"),"') are a subset of codes captured in 'exclude'."))
                  return(NULL)
@@ -96,11 +105,14 @@ copyScanSelection <- function ( vars, dat, id, sourceDir, targetDir, codebook, s
             return(sepCod)}))                                                   ### jetzt aus 'liste' alle scans loeschen, die es gar nicht gibt
     scans<- list.files(path = sourceDir, pattern = paste0(suffix, "$"), recursive = TRUE)
     if ( length(scans)==0) {stop(paste0("Cannot found any scan files in source directory '",sourceDir,"'.\nPlease check if the chosen suffix ('",suffix,"') is correct."))}
-    scan2<- eatTools::halveString(string = scans, pattern="/", first=FALSE)
-    if (length(intersect(tolower(liste[,"scans"]), tolower(scan2[,2]))) == 0) {warning("keine Scans im Verzeichnis gefunden.")}
-    weg  <- setdiff(tolower(liste[,"scans"]), tolower(scan2[,2]))
-    if ( length(weg)>0) { liste <- liste[-eatTools::whereAre(weg, tolower(liste[,"scans"]), verbose = FALSE),]}
-    b    <- match(tolower(liste[,"scans"]),tolower(scan2[,2]))
+    scan2<- data.frame ( eatTools::halveString(string = scans, pattern="/", first=FALSE), stringsAsFactors = FALSE)
+  ### hotfix: wenn der separator in der codebookliste vom separator im Variablennamen sich unterscheidet ... deshalb separators vereinheitlichen
+    liste[,"scans_einheitl"] <- unlist(lapply(strsplit(liste[,3], "\\.|_|-"), FUN = function (stri) {paste(stri, collapse="_")}))
+    scan2[,"scans_einheitl"] <- unlist(lapply(strsplit(scan2[,2], "\\.|_|-"), FUN = function (stri) {paste(stri, collapse="_")}))
+    if (length(intersect(tolower(liste[,"scans_einheitl"]), tolower(scan2[,"scans_einheitl"]))) == 0) {warning("keine Scans im Verzeichnis gefunden.")}
+    weg  <- setdiff(tolower(liste[,"scans_einheitl"]), tolower(scan2[,"scans_einheitl"]))
+    if ( length(weg)>0) { liste <- liste[-eatTools::whereAre(weg, tolower(liste[,"scans_einheitl"]), verbose = FALSE),]}
+    b    <- match(tolower(liste[,"scans_einheitl"]),tolower(scan2[,"scans_einheitl"]))
     liste[,"quelle"] <- file.path(sourceDir, scans[b])
     if ( dir.exists(targetDir) == FALSE ) {dir.create(targetDir, recursive=TRUE)}
     foo  <- lapply(unique(liste[,"variable"]), FUN = function(y) {
@@ -108,3 +120,4 @@ copyScanSelection <- function ( vars, dat, id, sourceDir, targetDir, codebook, s
             lapply(unique(liste[which(liste[,"variable"] == y),"code"]), FUN = function(co) { dir.create(file.path(targetDir, y, co))}) })
     foo2 <- file.copy(from = liste[,"quelle"], to = file.path(targetDir, liste[,"variable"], liste[,"code"], liste[,"scans"]))
     return(foo2)}
+
