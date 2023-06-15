@@ -79,7 +79,7 @@ copyScanSelection <- function ( vars, dat, id, sourceDir, targetDir, codebook, s
         stop(paste0("Cannot found bookletColumnPrefix '",bookletColumnPrefix, "' in column names of codebook."))
     }
     liste<- do.call("rbind", lapply (allN[["variablen"]], FUN = function (va) {
-            codes <- setdiff(unique(dat[,va]), unique(crop(exclude)))
+            codes <- setdiff(unique(dat[,va]), unique(eatTools::crop(exclude)))
             if ( length(codes) == 0) {
                  message(paste0("Variable '",va,"': no valid codes remain. All codes of '",va,"' ('",paste(unique(dat[,va]), collapse="', '"),"') are a subset of codes captured in 'exclude'."))
                  return(NULL)
