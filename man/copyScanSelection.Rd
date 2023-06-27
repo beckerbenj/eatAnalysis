@@ -48,7 +48,8 @@ usually contains several booklet columns which should begin with a common identi
 \item{exclude}{Character string of codes which should be ignored for selection. If all codes should
 be used, type \code{exclude = ""} or \code{exclude = NULL}.}
 
-\item{separators}{Character strings which separates booklet identifier and person identifier in the
+\item{separators}{Two character strings must be given: First string separates booklet identifier and page identifier in the
+filenames of the scans. Second string separates page identifier from person identifier in the
 filenames of the scans.}
 
 \item{suffix}{Suffix of the filenames of the scans. If the scan files have multiple suffixes, you
