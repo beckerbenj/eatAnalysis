@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/beckerbenj/eatAnalysis/workflows/R-CMD-check/badge.svg)](https://github.com/beckerbenj/eatAnalysis/actions)
-[![Codecov test coverage](https://codecov.io/gh/beckerbenj/eatAnalysis/branch/master/graph/badge.svg)](https://codecov.io/gh/beckerbenj/eatAnalysis?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/beckerbenj/eatAnalysis/branch/master/graph/badge.svg)](https://app.codecov.io/gh/beckerbenj/eatAnalysis?branch=master)
 <!-- badges: end -->
 
 ## Overview
