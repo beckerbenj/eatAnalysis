@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-09-06T10:19Z
+last_built: 2024-09-06T10:35Z
 urls:
   reference: https://beckerbenj.github.io/eatAnalysis/reference
   article: https://beckerbenj.github.io/eatAnalysis/articles
