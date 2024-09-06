@@ -20,7 +20,7 @@
 #'@export
 ### wenn vars gleich NULL; werden alle Variablen genommen
 transferAttributes <- function(origin, target, whichVars=NULL , whichAttrs = NULL){
-       target <- makeDataFrame(target)
+       target <- eatTools::makeDataFrame(target)
     ### wenn whichVars = NULL, dann alle gemeinsamen variablen nehmen
        if(is.null(whichVars)) {
           whichVars <- intersect(colnames(origin), colnames(target))
@@ -46,4 +46,3 @@ transferAttributes <- function(origin, target, whichVars=NULL , whichAttrs = NUL
           }
        }
        return(target)}
-          
