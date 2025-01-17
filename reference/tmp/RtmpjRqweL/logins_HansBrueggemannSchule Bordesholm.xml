@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<Testtakers>
+<Metadata>
+</Metadata>
+<Group id="HBB" label="HansBrueggemannSchule Bordesholm">
+<Login name="a7u7g" mode="run-hot-return" pw="v9p3s"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="b5h9z" mode="run-hot-return" pw="d9p2z"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="c6a6q" mode="run-hot-return" pw="c4a7g"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="d7f5b" mode="run-hot-return" pw="a9h3b"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="e9a7a" mode="run-hot-return" pw="h5x4p"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="f2t9f" mode="run-hot-return" pw="p9a4z"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="g7g2h" mode="run-hot-return" pw="b5h6d"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="h4b6y" mode="run-hot-return" pw="z2b6y"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="p6v2b" mode="run-hot-return" pw="p6b2z"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="q6q3g" mode="run-hot-return" pw="f4t9e"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="r5t5r" mode="run-hot-return" pw="e3z5p"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="s3x9q" mode="run-hot-return" pw="q6y4p"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="t9p2e" mode="run-hot-return" pw="r4a5y"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="u6a3p" mode="run-hot-return" pw="z2d5v"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="v3v3e" mode="run-hot-return" pw="s2d3s"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="w5f2z" mode="run-hot-return" pw="b4x5a"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="x2v7c" mode="run-hot-return" pw="v3g7b"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="y7v9x" mode="run-hot-return" pw="p3q2a"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z1e9a" mode="run-hot-return" pw="g2v4s"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z2y2g" mode="run-hot-return" pw="a3h5r"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z3t2r" mode="run-hot-return" pw="v4h7c"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z4z3f" mode="run-hot-return" pw="e2c6b"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z5z5v" mode="run-hot-return" pw="x5b4h"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z6s3r" mode="run-hot-return" pw="f7t5a"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z7u9c" mode="run-hot-return" pw="t9e4y"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login name="z8b6h" mode="run-hot-return" pw="p5q2h"> 
+ <Booklet>V8DeuTBAPilot2022TH15Faultier</Booklet> 
+ </Login>
+<Login mode="monitor-group" name="t9g4v" pw="x2t3q">
+</Login>
+</Group>
+</Testtakers>
