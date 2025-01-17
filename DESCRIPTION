@@ -7,7 +7,7 @@ Authors@R: c(
     person("Sebastian Weirich", role = c("aut")),
     person("Karoline", "Sachse", role = c("ctb")))
 Description: Helper functions for descriptive analysis, writing to files and file management.
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.0.0)
 Imports: stats, methods, utils, openxlsx, reshape2, plyr, car, lme4 (>= 1.0.0), boot, Matrix, combinat, eatTools (>= 0.7.4), wCorr, xtable, readxl
 License: GPL (>= 2)
 Encoding: UTF-8
