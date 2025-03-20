@@ -4,7 +4,13 @@
 \alias{get.lmer.effects}
 \title{Extract results}
 \usage{
-get.lmer.effects(lmerObj, bootMerObj = NULL, conf = 0.95, saveData = FALSE)
+get.lmer.effects(
+  lmerObj,
+  bootMerObj = NULL,
+  conf = 0.95,
+  saveData = FALSE,
+  quick = FALSE
+)
 }
 \arguments{
 \item{lmerObj}{An object of class \code{merMod} or \code{glmerMod}, as created by \code{\link[lme4]{lmer}} or \code{\link[lme4]{glmer}} from the \code{lme4} package.}
@@ -14,6 +20,8 @@ get.lmer.effects(lmerObj, bootMerObj = NULL, conf = 0.95, saveData = FALSE)
 \item{conf}{Applies if confidence intervals from a bootstrap should be augmented to the \code{lme4} results object. Define the upper bound of the confidence interval.}
 
 \item{saveData}{Logical: Should the data frame be attached to the output as an attribute?}
+
+\item{quick}{Logical: Sometimes, default method for computing \eqn{R^2} by calling \code{\link[MuMIn]{r.squaredGLMM}} is very time-consuming. Using \code{quick = TRUE} forces the function to choose an alternative method which, however, is not available when \code{lmerTest} is attached. If \code{lmerTest} is attached, no \eqn{R^2} is computed if \code{quick = TRUE}.}
 }
 \value{
 A data frame with at least 10 columns comprising the results of the GLMM analysis.

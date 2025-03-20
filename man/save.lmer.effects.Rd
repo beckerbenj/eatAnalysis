@@ -4,7 +4,15 @@
 \alias{save.lmer.effects}
 \title{Save lme4-output to disc}
 \usage{
-save.lmer.effects(lmerObj, lmerObjRestrict = NULL, fileName, scipen = 6)
+save.lmer.effects(
+  lmerObj,
+  lmerObjRestrict = NULL,
+  fileName,
+  scipen = 6,
+  standardized = FALSE,
+  digits = 3,
+  quick = FALSE
+)
 }
 \arguments{
 \item{lmerObj}{An \code{lme4} object to be saved.}
@@ -14,6 +22,12 @@ save.lmer.effects(lmerObj, lmerObjRestrict = NULL, fileName, scipen = 6)
 \item{fileName}{Name of the file for the output (without file extension).}
 
 \item{scipen}{Maximum number of decimal places before exponential notation is used.}
+
+\item{standardized}{Logical: Additionally print standardized coefficients to the output?}
+
+\item{digits}{Number of digits for printing standardized results}
+
+\item{quick}{Logical: Sometimes, default method for computing \eqn{R^2} by calling \code{\link[MuMIn]{r.squaredGLMM}} is very time-consuming. Using \code{quick = TRUE} forces the function to choose an alternative method which, however, is not available when \code{lmerTest} is attached. If \code{lmerTest} is attached, no \eqn{R^2} is computed if \code{quick = TRUE}.}
 }
 \value{
 No output is returned to console. Two files are created in the desired directory.
