@@ -97,7 +97,11 @@ ctype <- function ( dataFrame, vars ) {
                   if ( all(zle[3:4] == c("factor", "factor"))) { zle <- c(zle, "Polychoric")}
                   if ( all(zle[3:4] == c("numeric", "numeric"))) { zle <- c(zle, "Pearson")}
                   return(zle)}) ), stringsAsFactors=FALSE)
-        colnames(komb2)[5] <- "method"
+        colnames(komb2)[5] <- "method"                                          ### untere Zeile: Anzahl der paarweisen Beobachtungen ergaenzen
+        komb2  <- do.call("rbind", by(komb2, INDICES = komb2[,1:2], FUN = function (z) {
+                  stopifnot(nrow(z) == 1)
+                  z[["nPairs"]] <- nrow(na.omit(dataFrame[,c(z[[1]], z[[2]])]))
+                  return(z)}))
         return(komb2)}
 
 ### Matrix dreieckig machen

@@ -46,9 +46,10 @@
 #' agg <- aggregateDataOldL(datL,idCol="id", varCol="variable", valueCol="value")
 #'
 #'@export
-aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, varExclude = NULL, itemColName = "item", unexpected.pattern.as.na = TRUE, printCases = FALSE, printPattern = FALSE, inputList = NULL ) {
-        datLong     <- eatTools::makeDataFrame(datLong)
-        allVars     <- list(idCol = idCol, varCol = varCol, valueCol=valueCol)
+aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, varExclude = NULL, itemColName = "item", unexpected.pattern.as.na = TRUE,
+                    printCases = FALSE, printPattern = FALSE, inputList = NULL, keepVariableLevelInformation = NULL ) {
+        datLong     <- eatTools::makeDataFrame(datLong) |> dplyr::mutate_at(.vars = varCol, .funs = as.character)
+        allVars     <- list(idCol = idCol, varCol = varCol, valueCol=valueCol, kvl=keepVariableLevelInformation)
         all.Names   <- lapply(allVars, FUN=function(ii) {eatTools::existsBackgroundVariables(dat = datLong, variable=ii)})
         if(length(all.Names) != length(unique(all.Names)) ) {stop("'idCol', 'varCol', and 'valueCol' overlap.\n")}
         forbidden   <- c("valueSum", "valueAgg", "partialCredit", "valueMax", "numOfVars", "aggregationRule", itemColName)
@@ -66,7 +67,9 @@ aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, varExclude = NUL
             items  <- unique(inputList[["subunits"]][which(inputList[["subunits"]][,"subunit"] %in% unique(as.character(datLong[,all.Names[["varCol"]]]))),c("subunit", "unit")])
             if ( nrow(items) != length(unique(items[,1])) ) {stop("'subunit' column of <inputList>$subunits is not unique.")}
             colnames(items) <- c(all.Names[["varCol"]],itemColName)             ### werden die Items nicht nach Standardaggregierung aggregiert, sondern gar nicht.
-            datLong<- eatTools::mergeAttr(datLong, items, by = all.Names[["varCol"]], all.x = TRUE, all.y = FALSE, setAttr=FALSE)
+            beg    <- Sys.time()
+            datLong<- eatTools::mergeAttr(datLong, items, by = all.Names[["varCol"]], all.x = TRUE, all.y = FALSE, setAttr=FALSE, xName = "data set", yName = "item list derived from inputList")
+            #message(paste0("Merge item information from inputList to data: ", timeFormat(Sys.time() - beg)))
             datLong[,"aggregationRule"] <- car::recode(datLong[,"item"], "NA=FALSE; else=TRUE")
             if(length(which(is.na(datLong[,itemColName])))>0) {datLong[which(is.na(datLong[,itemColName])),itemColName] <- datLong[which(is.na(datLong[,itemColName])),all.Names[["varCol"]]]}
         }                                                                       ### Es werden dann einfach die Variablen uebernommen. Das mergen setzt NAs in der Itemspalte, wenn es keine Aggregierungsvorschrift gibt. Die NAs werden dann mit dem Wert der Variablenspalte aufgefuellt
@@ -84,53 +87,79 @@ aggregateDataOldL<- function (datLong, idCol, varCol, valueCol, varExclude = NUL
         toAgg       <- names(which(rowSums(table(datLong[,c(itemColName,all.Names[["varCol"]])]) != 0)>1))
         noAgg       <- setdiff(unique(as.character(datLong[,itemColName])), toAgg)
         message(paste0("Overall: ",length(unique(as.character(datLong[,all.Names[["varCol"]]]))), " variables, ", length(unique(as.character(datLong[,itemColName]))), " items. Aggregate ", length(unique(datLong[which(datLong[,itemColName] %in% toAgg), all.Names[["varCol"]]])), " variables to ", length(toAgg) , " items."))
-        if (printCases) { print(table(eatTools::facToChar(datLong[which(datLong[,itemColName] %in% toAgg),c(all.Names[["varCol"]], itemColName)]))) }
-     ### nicht zu aggregierende Daten sammeln
-        datNoAgg    <- datLong[which(datLong[,itemColName] %in% noAgg),]
-        datNoAgg    <- data.frame ( datNoAgg, valueSum = datNoAgg[,all.Names[["valueCol"]]], valueAgg = datNoAgg[,all.Names[["valueCol"]]], partialCredit=FALSE, valueMax = NA, stringsAsFactors = FALSE)
+        if (printCases) { print(table(facToChar(datLong[which(datLong[,itemColName] %in% toAgg),c(all.Names[["varCol"]], itemColName)]))) }
      ### zu aggregierende Daten aggregieren: Achtung! die unexpected missing pattern findet man im Langformat weniger gut, weil es ja (ggf.) keine NAs in den Zeilen gibt!
      ### so ein unexpected pattern wuerde man nur daran erkennen, dass fuer eine person 4 variablen (= item responses) pro item existieren, fuer eine andere aber nur 3
      ### wenn der Datensatz allerdings so gestaltet ist, dass es im langformat NAs gibt, dann koennen diese pattern auch so auftreten.
      ### es gibt also zweierlei moeglichkeiten, wie diese pattern im Datensatz auftreten koennen ... schwierig ...
         datAgg      <- doAggLong(datLong=datLong, all.Names=all.Names,itemColName=itemColName,printPattern=printPattern, toAgg=toAgg, printCases=printCases, unexpected.pattern.as.na=unexpected.pattern.as.na, inputList=inputList)
-        datAgg      <- eatTools::rbind_common(datNoAgg, do.call(eatTools::rbind_common, datAgg))
+     ### nicht zu aggregierende Daten sammeln
+        datNoAgg    <- datLong[which(datLong[,itemColName] %in% noAgg),]
+        if(nrow(datNoAgg)>0) {
+           datNoAgg    <- data.frame ( datNoAgg, valueSum = datNoAgg[,all.Names[["valueCol"]]], valueAgg = datNoAgg[,all.Names[["valueCol"]]], partialCredit=FALSE, valueMax = NA, stringsAsFactors = FALSE)
+           datAgg      <- eatTools::rbind_common(datNoAgg, datAgg)
+        }
         return(datAgg)}
 
 doAggLong <- function(datLong, all.Names,itemColName,printPattern, toAgg, printCases, unexpected.pattern.as.na, inputList){
         datLong <- eatTools::facToChar(datLong[which(datLong[,itemColName] %in% toAgg),])
-        datAgg  <- by(data = datLong, INDICES = datLong[,itemColName], FUN = function (i ) {
-                   frm<- paste0(all.Names[["idCol"]], " ~ ", all.Names[["varCol"]])
-                   iw <- reshape2::dcast(i, stats::as.formula(frm), value.var = all.Names[["valueCol"]])
-                   foo<- checkUnexpectedPattern(iw[,-1, drop=FALSE], item.i = i[1,itemColName], printCases=printCases, printPattern=printPattern)
-                   i[,"numOfVars"] <- ncol(iw) - 1
-                   agg<- do.call(eatTools::rbind_common, by(i, INDICES = i[,all.Names[["idCol"]]], FUN = function (j) {
-                         colsWeg <- unique(c(names(which(sapply(j, FUN = function (x) {length(unique(x)) != 1 }))), all.Names[["varCol"]], all.Names[["valueCol"]]))
-                         if(nrow(j) < j[1,"numOfVars"]) {vec <- c(j[,all.Names[["valueCol"]]], rep(NA, times =j[1,"numOfVars"]-nrow(j)))} else{vec <- j[,all.Names[["valueCol"]]]}
-                         summe   <- ifelse( all(is.na(vec)), NA, sum(vec, na.rm=!unexpected.pattern.as.na))
-                         if (is.null(inputList)) {
-                             agg     <- ifelse(summe == length(vec),1,0)
-                         }  else  {
-                             sl  <- inputList[["unitRecodings"]][which(inputList[["unitRecodings"]][,"unit"] == unique(j[,itemColName])),]
-                             if ( nrow(sl) == 0 ) {stop(paste0("Cannot find aggregation rule in 'unitRecodings' sheet of the input list for item '",unique(j[,itemColName]),"'."))}
-                             recstr <- paste("'",sl[,"value"] , "' = '" , sl[,"valueRecode"],"'",sep="", collapse="; ")
-                             agg <- car::recode ( summe, recstr)
-                         }
-                         ret     <- data.frame ( j[1,-match(colsWeg, colnames(j))], valueSum = summe, valueAgg = agg, partialCredit = TRUE, valueMax = j[1,"numOfVars"], stringsAsFactors = FALSE)
-                         return(ret)}))
-                   return(agg)})
-        return(datAgg)}
+        formel  <- paste0(all.Names[["idCol"]], " ~ ", all.Names[["varCol"]])
+        datWide <- reshape2::dcast(datLong, stats::as.formula(formel), value.var = all.Names[["valueCol"]])
+        beg     <- Sys.time()
+        datAgg  <- suppressMessages( aggregateDataOld(all.daten=datWide,spalten=-1, unexpected.pattern.as.na = unexpected.pattern.as.na, printCases = printCases, printPattern = printPattern, inputList = inputList ))
+        #message(paste0("Wide format aggregation calling 'aggregateDataOld()': ", timeFormat(Sys.time() - beg)))
+     ### jetzt den Output der wide format Aggregierung in das Longformat zurueckpressen
+     ### dazu alle Spalten loeschen, die nicht unique ueber Personen/Item-kombinationen sind! (wenn etwa zwei Variablen desselben Items unterschiedliche Metadaten haben, muss diese Spalte im Itemdatensatz raus)
+        persItem<- paste(datLong[,all.Names[["idCol"]]], datLong[,itemColName], sep="_")
+        beg     <- Sys.time()
+        colsWeg <- sapply(datLong, FUN = function (x) {
+                   if (length(which(is.na(x))) >0 ) {
+                       if(inherits(x, c("numeric", "integer"))) {
+                           x <- car::recode(x, "NA=100000")
+                       }  else  {
+                           x <- car::recode(x, "NA='fehlenderWert'")
+                       }
+                   }
+                   ret <- lme4::isNested(persItem, x)
+                   return(ret)})
+        colsWeg <- unique(c(all.Names[["varCol"]], all.Names[["valueCol"]], names(colsWeg)[which(colsWeg==FALSE)]))
+        #message(paste0("Identify columns with information on variable level instead of item level, i.e. columns which are not unique across person/item combination: ", timeFormat(Sys.time() - beg)))
+     ### ggf. Metadaten identifizieren, die in den Itemdatensatz uebernommen werden sollen, auch wenn sie ueber Variablen variieren
+        ind     <- which(all.Names[["kvl"]] %in% colsWeg)
+        if ( length(ind) >0) {
+             for ( v in all.Names[["kvl"]][ind] ) {                             ### Schleife ueber alle Variablen, die es betrifft
+                 it <- by(datLong, INDICES = datLong[,itemColName], FUN = function (i) { length(unique(i[,v]))})
+                 it <- it[which(it != 1)]                                       ### welche Items betroffen
+                 message(paste0("Found ",length(it), " items with variables where meta data '",v,"' vary."))
+                 stopifnot(length(it)>0)
+                 for ( its in 1:length(it)) {
+                       print(table(datLong[which(datLong[,itemColName] == names(it)[its]),c(all.Names[["varCol"]],v, itemColName) ]))
+                 }
+             }
+        }
+        datLong2<- datLong[!duplicated(datLong[,c(all.Names[["idCol"]],itemColName)]),-match(colsWeg, colnames(datLong))]
+     ### datAgg-Output aufbereiten
+        datAgg2 <- reshape2::melt(datAgg[["sum"]], id.vars = all.Names[["idCol"]], na.rm=TRUE, variable.name = "item", value.name = "valueSum")
+        datAgg3 <- reshape2::melt(datAgg[["agg"]], id.vars = all.Names[["idCol"]], na.rm=TRUE, variable.name = "item", value.name = "valueAgg")
+        datMax  <- data.frame ( item = datAgg[["pc.list"]][,"Var"], valueMax = datAgg[["pc.list"]][,"max"], stringsAsFactors = FALSE)
+        beg     <- Sys.time()
+        datAgg4 <- eatTools::mergeAttr(datAgg2, datAgg3, by = c(all.Names[["idCol"]],itemColName), all=TRUE, setAttr=FALSE)
+        datAgg4 <- eatTools::mergeAttr(datAgg4, datMax, by=itemColName,all=TRUE, setAttr=FALSE, verbose=FALSE)
+        datLong2<- eatTools::mergeAttr(datLong2, datAgg4, by=c(all.Names[["idCol"]],itemColName), all=TRUE, setAttr=FALSE)
+        #message(paste0("Merge aggregated data to meta data captured in variable data set: ", timeFormat(Sys.time() - beg)))
+        return(datLong2)}
 
 ### Funktion hat keine Rueckgabe, checkt nur
 checkUnexpectedPattern <- function(sub.dat, item.i, printCases, printPattern){
         isNA         <- table(rowSums(is.na(sub.dat)))
         isNA.names   <- as.numeric(names(isNA))
         unexpected   <- setdiff(isNA.names, c(0,ncol(sub.dat)))
-    # if ( substr(colnames(sub.dat)[1], 1, 8) == "M3621603") {browser()}
-        if( length( unexpected ) > 0  )   {
-          cases      <- sum(as.numeric(isNA[as.character(unexpected)]))
-          message(paste0("Caution! Found unexpected missing pattern in variables for item ",item.i, " in ",cases," cases.") )
+    # if ( substr(colnames(sub.dat)[1], 1, 8) == "M3621603") {browser()}        ### Untere Zeile: Achtung! Hier muss cat statt message genommen werden!
+        if( length( unexpected ) > 0  )   {                                     ### wenn aggregateDataOld von aggregateDataOldL aufgerufen wird, sollen die Informations-messages
+          cases      <- sum(as.numeric(isNA[as.character(unexpected)]))         ### mit suppressMessages() ausgeblendet werden, diese unten stehenden Angaben jedoch NICHT.
+          cat(paste0("Caution! Found unexpected missing pattern in variables for item ",item.i, " in ",cases," cases.\n") )
           whichUnexp <- which( rowSums(is.na(sub.dat)) %in% unexpected)
-          if (printCases)   {message(paste0("   Cases in question: ", paste(whichUnexp, collapse=", ")))}
+          if (printCases)   {cat(paste0("   Cases in question: ", paste(whichUnexp, collapse=", "), "\n"))}
           if (printPattern) {
               patt <- apply(sub.dat[whichUnexp,], MARGIN = 1, FUN = function ( zeile ) { paste(zeile, collapse = "_")})
               print(table(patt))
