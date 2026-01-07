@@ -1,0 +1,86 @@
+# Package index
+
+## All functions
+
+- [`aggregateDataOld()`](https://beckerbenj.github.io/eatAnalysis/reference/aggregateDataOld.md)
+  : Aggregate variables to items and/or scales.
+
+- [`aggregateDataOldL()`](https://beckerbenj.github.io/eatAnalysis/reference/aggregateDataOldL.md)
+  : Aggregate variables to items and/or scales in long format
+  data.frames.
+
+- [`convertLabel()`](https://beckerbenj.github.io/eatAnalysis/reference/convertLabel.md)
+  : Transform SPSS variable and value labels.
+
+- [`copyScanSelection()`](https://beckerbenj.github.io/eatAnalysis/reference/copyScanSelection.md)
+  : Copy booklet scan selection to desired directory
+
+- [`createLabelList()`](https://beckerbenj.github.io/eatAnalysis/reference/createLabelList.md)
+  : Creates a data.frame with variable and value labels from variable
+  attributes
+
+- [`createLoginXml()`](https://beckerbenj.github.io/eatAnalysis/reference/createLoginXml.md)
+  : Creates xml login files from data.frame for computer-based
+  assessment
+
+- [`createSpssSyntaxSnippet()`](https://beckerbenj.github.io/eatAnalysis/reference/createSpssSyntaxSnippet.md)
+  : Prepare SPSS syntax to transfer variable and value labels into an
+  SPSS data set
+
+- [`df2tex_xtable()`](https://beckerbenj.github.io/eatAnalysis/reference/df2tex_xtable.md)
+  : Create latex table code.
+
+- [`get.lmer.effects()`](https://beckerbenj.github.io/eatAnalysis/reference/get.lmer.effects.md)
+  : Extract results
+
+- [`get.lmer.effects.forBootMer()`](https://beckerbenj.github.io/eatAnalysis/reference/get.lmer.effects.forBootMer.md)
+  :
+
+  `get.lmer.effects` for bootstrap
+
+- [`intGen()`](https://beckerbenj.github.io/eatAnalysis/reference/intGen.md)
+  :
+
+  Generate interaction terms for `lm` formulas
+
+- [`item.logit()`](https://beckerbenj.github.io/eatAnalysis/reference/item.logit.md)
+  : Simulates 1PL or 2PL responses
+
+- [`loadRdataLikeRDS()`](https://beckerbenj.github.io/eatAnalysis/reference/loadRdataLikeRDS.md)
+  : Reload Saved rda or Rdata Datasets and assign them to a new object
+
+- [`pretty_table()`](https://beckerbenj.github.io/eatAnalysis/reference/pretty_table.md)
+  : Create a standard frequency table.
+
+- [`prop_table()`](https://beckerbenj.github.io/eatAnalysis/reference/prop_table.md)
+  : Create a standard relative frequency table.
+
+- [`prop_table_by_and_all()`](https://beckerbenj.github.io/eatAnalysis/reference/prop_table_by_and_all.md)
+  : Create a standard relative frequency table.
+
+- [`read_xlsx()`](https://beckerbenj.github.io/eatAnalysis/reference/read_xlsx.md)
+  :
+
+  Read an `.xlsx` file.
+
+- [`save.lmer.effects()`](https://beckerbenj.github.io/eatAnalysis/reference/save.lmer.effects.md)
+  : Save lme4-output to disc
+
+- [`transferAttributes()`](https://beckerbenj.github.io/eatAnalysis/reference/transferAttributes.md)
+  : Transfer attributes from a origin data.frame to a target data.frame.
+
+- [`unzip.wa()`](https://beckerbenj.github.io/eatAnalysis/reference/unzip.wa.md)
+  : Unzip files into desired directory
+
+- [`update_xlsx()`](https://beckerbenj.github.io/eatAnalysis/reference/update_xlsx.md)
+  :
+
+  Update an `.xlsx` file.
+
+- [`write_xlsx()`](https://beckerbenj.github.io/eatAnalysis/reference/write_xlsx.md)
+  :
+
+  Save to `.xlsx`.
+
+- [`wtdHetcor()`](https://beckerbenj.github.io/eatAnalysis/reference/wtdHetcor.md)
+  : Weighted heterogeneous correlation matrix.
