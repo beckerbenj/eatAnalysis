@@ -22,7 +22,8 @@ aggregateDataOldL(
   unexpected.pattern.as.na = TRUE,
   printCases = FALSE,
   printPattern = FALSE,
-  inputList = NULL
+  inputList = NULL,
+  keepVariableLevelInformation = NULL
 )
 ```
 
@@ -109,6 +110,4 @@ colnames(dat)[-1] <- c("I1a", "I1b", "I1c", "I2a", "I3a", "I3b", "I4a", "I5a", "
 datL<- reshape2::melt(dat, id.vars = "id")
 agg <- aggregateDataOldL(datL,idCol="id", varCol="variable", valueCol="value")
 #> Overall: 10 variables, 6 items. Aggregate 7 variables to 3 items.
-#> Warning: the ‘isNested’ function has moved to the reformulas package. Please update your imports, or ask an upstream package maintainter to do so.
-#> This warning is displayed once per session.
 ```

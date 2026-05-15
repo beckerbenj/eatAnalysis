@@ -84,3 +84,6 @@
 
 - [`wtdHetcor()`](https://beckerbenj.github.io/eatAnalysis/reference/wtdHetcor.md)
   : Weighted heterogeneous correlation matrix.
+
+- [`xview()`](https://beckerbenj.github.io/eatAnalysis/reference/xview.md)
+  : xlsx-based Data viewer on a matrix-like R object

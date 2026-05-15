@@ -9,6 +9,7 @@ includes functions for processing `lme4` output, writing files to
 ## Installation
 
 ``` r
+
 # Install eatAnalysis from GitHub via
 devtools::install_github("beckerbenj/eatAnalysis")
 ```
@@ -16,5 +17,6 @@ devtools::install_github("beckerbenj/eatAnalysis")
 ## Usage
 
 ``` r
+
 library(eatAnalysis)
 ```

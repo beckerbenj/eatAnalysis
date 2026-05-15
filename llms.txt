@@ -9,6 +9,7 @@ includes functions for processing `lme4` output, writing files to
 ## Installation
 
 ``` r
+
 # Install eatAnalysis from GitHub via
 devtools::install_github("beckerbenj/eatAnalysis")
 ```
@@ -16,6 +17,7 @@ devtools::install_github("beckerbenj/eatAnalysis")
 ## Usage
 
 ``` r
+
 library(eatAnalysis)
 ```
 
@@ -105,4 +107,7 @@ library(eatAnalysis)
 
 - [`wtdHetcor()`](https://beckerbenj.github.io/eatAnalysis/reference/wtdHetcor.md)
   : Weighted heterogeneous correlation matrix.
+
+- [`xview()`](https://beckerbenj.github.io/eatAnalysis/reference/xview.md)
+  : xlsx-based Data viewer on a matrix-like R object
 

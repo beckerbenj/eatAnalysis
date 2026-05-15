@@ -80,7 +80,7 @@ wtdHetcor(mtcars, vars = vars, out = "long")
 #> 3   hp  mpg numeric numeric    Pearson     32 -0.7761684
 wtdHetcor(mtcars, vars = vars, weights = "weight", out = "long")
 #>   Var1 Var2  class1  class2     method nPairs        cor
-#> 1  cyl   hp  factor numeric Polyserial     32  0.9621595
-#> 2  cyl  mpg  factor numeric Polyserial     32 -0.9695254
-#> 3   hp  mpg numeric numeric    Pearson     32 -0.7767433
+#> 1  cyl   hp  factor numeric Polyserial     32  0.9742075
+#> 2  cyl  mpg  factor numeric Polyserial     32 -0.9525372
+#> 3   hp  mpg numeric numeric    Pearson     32 -0.7957354
 ```
