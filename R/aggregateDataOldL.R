@@ -120,7 +120,7 @@ doAggLong <- function(datLong, all.Names,itemColName,printPattern, toAgg, printC
                            x <- car::recode(x, "NA='fehlenderWert'")
                        }
                    }
-                   ret <- lme4::isNested(persItem, x)
+                   ret <- reformulas::isNested(persItem, x)
                    return(ret)})
         colsWeg <- unique(c(all.Names[["varCol"]], all.Names[["valueCol"]], names(colsWeg)[which(colsWeg==FALSE)]))
         #message(paste0("Identify columns with information on variable level instead of item level, i.e. columns which are not unique across person/item combination: ", timeFormat(Sys.time() - beg)))

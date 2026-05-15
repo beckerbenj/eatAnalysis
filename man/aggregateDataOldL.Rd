@@ -14,7 +14,8 @@ aggregateDataOldL(
   unexpected.pattern.as.na = TRUE,
   printCases = FALSE,
   printPattern = FALSE,
-  inputList = NULL
+  inputList = NULL,
+  keepVariableLevelInformation = NULL
 )
 }
 \arguments{
