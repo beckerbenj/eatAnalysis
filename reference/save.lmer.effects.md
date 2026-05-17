@@ -47,10 +47,11 @@ save.lmer.effects(
 - quick:
 
   Logical: Sometimes, default method for computing \\R^2\\ by calling
-  `r.squaredGLMM` is very time-consuming. Using `quick = TRUE` forces
-  the function to choose an alternative method which, however, is not
-  available when `lmerTest` is attached. If `lmerTest` is attached, no
-  \\R^2\\ is computed if `quick = TRUE`.
+  [`r.squaredGLMM`](https://rdrr.io/pkg/MuMIn/man/r.squaredGLMM.html) is
+  very time-consuming. Using `quick = TRUE` forces the function to
+  choose an alternative method which, however, is not available when
+  `lmerTest` is attached. If `lmerTest` is attached, no \\R^2\\ is
+  computed if `quick = TRUE`.
 
 ## Value
 

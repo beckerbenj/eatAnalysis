@@ -55,7 +55,7 @@ Prints the resulting latex code to console
 ``` r
 df2tex_xtable(mtcars)
 #> % latex table generated in R 4.6.0 by xtable 1.8-8 package
-#> % Fri May 15 12:14:44 2026
+#> % Sun May 17 13:54:08 2026
 #> \begin{table}[ht]
 #> \centering
 #> \caption{} 
