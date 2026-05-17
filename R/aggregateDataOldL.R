@@ -28,6 +28,12 @@
 #'@param inputList Optional: Input list to differentiate between variables (sub items) and items. If \code{NULL},
 #'all variables in the data frame which share the same ID except for the last sign are considered
 #'to belong to the same item.
+#'@param keepVariableLevelInformation When converting variable level data to item level data by aggregation, meta data of variables will be kept
+#'if the values of meta data variables do not vary between the variables which belong to a common
+#'item. Otherwise, this meta data variable will not longer occur in item level data set. If this
+#'happens inadvertently, i.e. if a meta data variable is missing in item level data without a cause,
+#'you can specify this variable in \code{keepVariableLevelInformation} to get information how many (and which)
+#'variables (of a common item) have inconsistent meta data.
 #'
 #'@return A data.frame in the long format containing sum and aggregated values, and maintaining all additional
 #'columns from the original data.frame if its values do not vary between variables which belong to the same item.
